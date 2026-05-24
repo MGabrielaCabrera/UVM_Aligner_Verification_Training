@@ -1,4 +1,10 @@
+// Testbench for the cfs_aligner module
+
+`include "cfs_algn_test_pkg.sv"
 module testbench();
+  
+  import uvm_pkg::*;
+  import cfs_algn_test_pkg::*;
   
   reg clk;
   reg reset_n;
@@ -6,7 +12,7 @@ module testbench();
   initial begin
     clk = 0;
     forever begin
-      #5ns clk = ~clk;
+      #5ns clk = ~clk; //100MHz
     end
   end
   
@@ -18,6 +24,8 @@ module testbench();
     reset_n= 1;
   end
   
+  //The test name can be passed as an argument when running the simulation
+  // +UVM_TESTNAME=cfs_algn_test_reg_access
   initial begin
     run_test("");
   end 
