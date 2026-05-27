@@ -24,9 +24,15 @@ module testbench();
     reset_n= 1;
   end
   
-  //The test name can be passed as an argument when running the simulation
-  // +UVM_TESTNAME=cfs_algn_test_reg_access
+
   initial begin
+    // To see the waveforms:
+    $dumpfile("dump.vcd");
+    $dumpvars; // tells the simulator to record signal value changes to
+               // a .vcd file (opened with $dumpfile)
+
+    //The test name can be passed as an argument when running the simulation
+    // +UVM_TESTNAME=cfs_algn_test_reg_access
     run_test("");
   end 
   
