@@ -11,5 +11,22 @@
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
         endfunction
+        
+        // The run phase is where the main stimulus generation and checking happens.
+        virtual task run_phase(uvm_phase phase);
+            // Objection mechanim to control when the test ends. An objection
+            // is like a counter. When you raise an objection, you are 
+            // incrementing the counter, and when you drop an objection
+            // you are decrementing the counter. When the counter goes
+            // to zero, the test ends. 
+            phase.raise_objection(this, "TEST_DONE");
+ 
+            `uvm_info("DEBUG", "Start of test", UVM_LOW);
+            #100ns;
+            `uvm_info("DEBUG", "End of test", UVM_LOW);
+
+            phase.drop_objection(this, "TEST_DONE");
+        endtask
      endclass
+
 `endif
