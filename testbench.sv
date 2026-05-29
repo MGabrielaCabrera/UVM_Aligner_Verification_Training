@@ -33,6 +33,14 @@ module testbench();
     $dumpvars; // tells the simulator to record signal value changes to
                // a .vcd file (opened with $dumpfile)
 
+    // APB interface to the database: the first argument is the type of the object being set, in this case a virtual interface
+    // The first argument of the set method is the component where the object is configured (the context)
+    // The second argument is the instance name of the component where the object will be used,
+    // The third argument is the field name, which is a string that can be used to identify the object in the component
+    // The fourth argument is the object being set, in this case the APB interface instance
+      uvm_config_db#(virtual cfs_apb_if)::set(null, "uvm_test_top.env.apb_agent", "vif", apb_if);
+      
+    // Run the test
     //The test name can be passed as an argument when running the simulation
     // +UVM_TESTNAME=cfs_algn_test_reg_access
     run_test("");
