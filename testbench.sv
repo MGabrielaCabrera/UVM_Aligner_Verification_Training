@@ -7,7 +7,9 @@ module testbench();
   import cfs_algn_test_pkg::*;
   
   reg clk;
-  reg reset_n;
+
+  // Instance of the APB interface
+  cfs_apb_if apb_if(.pclk(clk));
   
   initial begin
     clk = 0;
@@ -17,11 +19,11 @@ module testbench();
   end
   
   initial begin
-    reset_n = 1;
+    apb_if.preset_n = 1;
     #6ns;
-    reset_n = 0;
+    apb_if.preset_n = 0;
     #30ns;
-    reset_n= 1;
+    apb_if.preset_n = 1;
   end
   
 
@@ -38,7 +40,15 @@ module testbench();
   
   cfs_aligner dut(
     .clk(clk),
-    .reset_n(reset_n)
+    .reset_n(apb_if.preset_n),
+    .paddr(apb_if.paddr),
+    .psel(apb_if.psel),
+    .penable(apb_if.penable),
+    .pwrite(apb_if.pwrite),
+    .pwdata(apb_if.pwdata),
+    .pready(apb_if.pready),
+    .prdata(apb_if.prdata),
+    .pslverr(apb_if.pslverr)
   );
   
 endmodule
