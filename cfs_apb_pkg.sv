@@ -10,6 +10,10 @@
         // Importing the UVM package to use UVM classes and macros
         import uvm_pkg::*;
 
+        `include "cfs_apb_types.sv"
+        `include "cfs_apb_agent_config.sv"
+        `include "cfs_apb_agent.sv"
+
     endpackage
 
 `endif
