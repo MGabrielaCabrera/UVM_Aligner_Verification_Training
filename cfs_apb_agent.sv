@@ -18,6 +18,19 @@
             agent_config = cfs_apb_agent_config::type_id::create("agent_config", this);
         endfunction
 
+        virtual function void connect_phase(uvm_phase phase);
+            cfs_apb_vif vif;
+            super.connect_phase(phase);
+
+            if (uvm_config_db#(cfs_apb_vif)::get(this, "", "vif", vif) == 0) begin
+                `uvm_fatal("APB_NO_VIF", "Could not get from the database the APB virtual interface")
+            end
+            else begin
+                agent_config.set_vif(vif);
+            end
+        endfunction
+
+
     endclass
 
 `endif
