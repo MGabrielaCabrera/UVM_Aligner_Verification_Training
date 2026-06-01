@@ -19,6 +19,8 @@
             // incrementing the counter, and when you drop an objection
             // you are decrementing the counter. When the counter goes
             // to zero, the test ends. 
+            // As all the run_phases run in parallel, the UVM needs to know
+            // when to finish, this is why the objection are used.
             phase.raise_objection(this, "TEST_DONE");
  
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
