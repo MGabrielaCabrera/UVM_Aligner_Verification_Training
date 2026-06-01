@@ -4,6 +4,7 @@
     `define CFS_ALGN_TEST_PKG_SV
     `include "uvm_macros.svh"
     `include "cfs_algn_pkg.sv"
+    `include "cfs_apb_pkg.sv"
 
     package cfs_algn_test_pkg;
         import uvm_pkg::*;
