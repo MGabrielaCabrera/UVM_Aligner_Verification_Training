@@ -25,15 +25,6 @@
  
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
-            
-            // We create some random items and print them to the console. This is just to show how to
-            // use the item class and the randomization. In a real test, you would send these items
-            // to the driver to drive the DUT.
-            for (int i = 0; i < 10; i++) begin
-                cfs_apb_item_drv item = cfs_apb_item_drv::type_id::create("item");
-                void'(item.randomize());
-                `uvm_info("DEBUG", $sformatf("[Item %0d]: %s", i, item.convert2string()), UVM_LOW);
-            end
 
             `uvm_info("DEBUG", "End of test", UVM_LOW);
 
