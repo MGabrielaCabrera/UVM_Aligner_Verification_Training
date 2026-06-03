@@ -6,10 +6,17 @@
         // Virtual interface
         local cfs_apb_vif vif;
 
+        // An agent is active when it has a driver, and passive when it doesn't
+        // have a driver. This is useful to determine if the agent will drive
+        // the signals or just monitor them.
+        local uvm_active_passive_enum active_passive;
+
         `uvm_component_utils(cfs_apb_agent_config)
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
+
+            active_passive = UVM_ACTIVE; // By default, we set the agent to active
         endfunction
 
         virtual function cfs_apb_vif get_vif();
@@ -24,6 +31,14 @@
             else begin
                 `uvm_fatal("ALGORITHM_ISSUE", "Trying to set the APB virtual interface more than once")
             end
+        endfunction
+
+        virtual function uvm_active_passive_enum get_active_passive();
+            return active_passive;  
+        endfunction
+
+        virtual function void set_active_passive(uvm_active_passive_enum value);
+            active_passive = value;
         endfunction
 
         // UVM phase (it can be implemented because it's a uvm_component)
