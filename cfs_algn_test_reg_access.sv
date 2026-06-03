@@ -26,13 +26,22 @@
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
 
-            begin
+            begin // Sequence simple
                 cfs_apb_sequence_simple seq_simple;
                 seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
                 void'(seq_simple.randomize() with { 
                     item.addr == 32'h0000_0222; });
                 
                 seq_simple.start(env.apb_agent.sequencer);
+            end
+
+            begin // Sequence RW
+                cfs_apb_sequence_rw seq_rw;
+                seq_rw = cfs_apb_sequence_rw::type_id::create("seq_rw");
+                void'(seq_rw.randomize() with { 
+                    addr == 32'h0000_0004;});
+                
+                seq_rw.start(env.apb_agent.sequencer);
             end
 
             `uvm_info("DEBUG", "End of test", UVM_LOW);
