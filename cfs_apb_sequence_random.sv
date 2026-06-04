@@ -17,10 +17,15 @@
         virtual task body();
 
             for (int i = 0; i < num_items; i++) begin
-                cfs_apb_sequence_simple seq= cfs_apb_sequence_simple::type_id::create("seq");
-                void'(seq.randomize());
-                seq.start(m_sequencer, this);             
+                cfs_apb_sequence_simple seq;
+                //seq = cfs_apb_sequence_simple::type_id::create("seq");
+                //void'(seq.randomize());
+                //seq.start(m_sequencer, this);  
+                `uvm_do(seq)
+
             end
+
+
         endtask
 
     endclass

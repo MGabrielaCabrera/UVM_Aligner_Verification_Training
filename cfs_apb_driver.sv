@@ -14,7 +14,7 @@
 
             forever begin
                 seq_item_port.get_next_item(item);
-                `uvm_info(get_type_name(), $sformatf("Driving item: %s", item.convert2string()), UVM_MEDIUM)
+                `uvm_info("DEBUG", $sformatf("Driving item: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
                 drive_item(item);
                 seq_item_port.item_done();
             end
@@ -23,7 +23,7 @@
         virtual task drive_item(cfs_apb_item_drv item);
             // Implement the logic to drive the APB signals based on the item properties
             // This is a placeholder and should be replaced with actual driving code
-            `uvm_info(get_type_name(), $sformatf("Driving APB transaction: %s", item.convert2string()), UVM_MEDIUM)
+            `uvm_info("DEBUG", $sformatf("Driving APB transaction: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
             // Example: Drive signals based on item.dir, item.addr, item.data, etc.
         endtask
 
