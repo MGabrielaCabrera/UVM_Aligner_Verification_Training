@@ -44,6 +44,16 @@
                 seq_rw.start(env.apb_agent.sequencer);
             end
 
+            begin // Sequence_random
+                cfs_apb_sequence_random seq_random;
+                seq_random = cfs_apb_sequence_random::type_id::create("seq_random");
+                void'(seq_random.randomize() with { 
+                    num_items == 3;});
+                
+                seq_random.start(env.apb_agent.sequencer);
+
+            end
+
             `uvm_info("DEBUG", "End of test", UVM_LOW);
 
             phase.drop_objection(this, "TEST_DONE");
