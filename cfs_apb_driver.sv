@@ -18,9 +18,21 @@
         endtask
 
         protected virtual task driver_transactions();
-            cfs_apb_item_drv item;
+            // We get the virtual interface from the agent config
+            // using get_vif() to protect the encapsulation
+            // of the virtual interface inside the agent config class
+            cfs_apb_vif vif = agent_config.get_vif();
+
+            // Initialize the signals
+            vif.paddr <= '0;
+            vif.pwrite <= 0;
+            vif.pwdata <= '0;
+            vif.psel <= 0;
+            vif.penable <= 0;
 
             forever begin
+                cfs_apb_item_drv item;
+
                 seq_item_port.get_next_item(item);
                 
                 driver_transaction(item);
@@ -30,7 +42,43 @@
         endtask
 
         protected virtual task driver_transaction(cfs_apb_item_drv item);
+            cfs_apb_vif vif = agent_config.get_vif();
+
             `uvm_info("DEBUG", $sformatf("Driving item: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
+            
+            // Pre drive delay
+            for (int i = 0; i < item.pre_drive_delay; i++) begin
+                @(posedge vif.pclk);
+            end
+
+            // Setup phase
+            vif.psel <= 1;
+            vif.paddr <= item.addr;
+            vif.pwrite <= bit'(item.dir);
+            if (item.dir == CFS_APB_WRITE) begin
+                vif.pwdata <= item.data;
+            end
+
+            @(posedge vif.pclk);
+            vif.penable <= 1;
+
+            @(posedge vif.pclk);
+            // Access phase
+            while(vif.pready !== 1) begin
+                @(posedge vif.pclk);
+            end
+
+            // Once pready is one, we can deassert the signals
+            vif.paddr <= '0;
+            vif.pwrite <= 0;
+            vif.pwdata <= '0;
+            vif.psel <= 0;
+            vif.penable <= 0;
+
+            // Post drive delay
+            for (int i = 0; i < item.post_drive_delay; i++) begin
+                @(posedge vif.pclk);
+            end
 
         endtask
 
