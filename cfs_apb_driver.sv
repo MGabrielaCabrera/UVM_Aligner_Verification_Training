@@ -10,21 +10,24 @@
         endfunction
 
         virtual task run_phase(uvm_phase phase);
+            driver_transactions();
+        endtask
+
+        protected virtual task driver_transactions();
             cfs_apb_item_drv item;
 
             forever begin
                 seq_item_port.get_next_item(item);
-                `uvm_info("DEBUG", $sformatf("Driving item: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
-                drive_item(item);
+                
+                driver_transaction(item);
+                
                 seq_item_port.item_done();
             end
         endtask
 
-        virtual task drive_item(cfs_apb_item_drv item);
-            // Implement the logic to drive the APB signals based on the item properties
-            // This is a placeholder and should be replaced with actual driving code
-            //`uvm_info("DEBUG", $sformatf("Driving APB transaction: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
-            // Example: Drive signals based on item.dir, item.addr, item.data, etc.
+        protected virtual task driver_transaction(cfs_apb_item_drv item);
+            `uvm_info("DEBUG", $sformatf("Driving item: \"%s\": %s", item.get_full_name(), item.convert2string()), UVM_NONE)
+
         endtask
 
     endclass
