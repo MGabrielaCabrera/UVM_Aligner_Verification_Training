@@ -18,8 +18,8 @@
         `include "cfs_apb_sequence_simple.sv"
         `include "cfs_apb_sequence_rw.sv"
         `include "cfs_apb_sequence_random.sv"
-        `include "cfs_apb_driver.sv"
         `include "cfs_apb_agent_config.sv"
+        `include "cfs_apb_driver.sv"
         `include "cfs_apb_agent.sv"
 
     endpackage

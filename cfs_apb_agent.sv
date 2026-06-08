@@ -39,10 +39,16 @@
                 agent_config.set_vif(vif);
             end
 
-            // We connect the driver and the sequencer only if the agent is active
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
+                
+                // We pass the agent config to the driver so it can access the virtual interface
+                driver.agent_config = agent_config;
+                
+                // We connect the driver and the sequencer only if the agent is active
                 driver.seq_item_port.connect(sequencer.seq_item_export);
             end
+
+
         endfunction
 
 
