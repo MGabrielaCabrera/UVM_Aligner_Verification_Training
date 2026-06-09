@@ -9,6 +9,9 @@
         cfs_apb_sequencer sequencer;
         cfs_apb_driver driver;
 
+        // Monitor handler
+        cfs_apb_monitor monitor;
+
         `uvm_component_utils(cfs_apb_agent)
 
         function new(string name = "", uvm_component parent);
@@ -20,6 +23,8 @@
             // We create the configuration object and set it as a child of the agent
             agent_config = cfs_apb_agent_config::type_id::create("agent_config", this);
             
+            monitor = cfs_apb_monitor::type_id::create("monitor", this);
+
             // We check if the agent is active or passive, and we create the sequencer
             // and driver only if it's active
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
@@ -38,6 +43,8 @@
             else begin
                 agent_config.set_vif(vif);
             end
+
+            monitor.agent_config = agent_config;
 
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
                 
