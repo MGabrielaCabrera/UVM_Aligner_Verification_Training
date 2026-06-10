@@ -20,6 +20,12 @@
         logic [`CFS_APB_MAX_DATA_WIDTH-1:0] prdata;
         logic pslverr;
 
+        bit has_checks;
+
+        initial begin
+            has_checks = 1;
+        end
+
 
     endinterface
 

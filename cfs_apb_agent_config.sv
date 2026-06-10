@@ -11,12 +11,16 @@
         // the signals or just monitor them.
         local uvm_active_passive_enum active_passive;
 
+        //Switch to enable the checks
+        local bit has_checks;
+
         `uvm_component_utils(cfs_apb_agent_config)
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
 
             active_passive = UVM_ACTIVE; // By default, we set the agent to active
+            has_checks = 1; // By default, we enable the checks
         endfunction
 
         virtual function cfs_apb_vif get_vif();
@@ -27,6 +31,9 @@
             // To prevent it is only set once, we check if it is already set before assigning the value
             if (vif == null) begin
                 vif = value;
+
+                // Sync with the has_checks of the interface
+                set_has_checks(get_has_checks());
             end
             else begin
                 `uvm_fatal("ALGORITHM_ISSUE", "Trying to set the APB virtual interface more than once")
@@ -41,6 +48,20 @@
             active_passive = value;
         endfunction
 
+        virtual function bit get_has_checks();
+            return has_checks;
+        endfunction
+
+        virtual function void set_has_checks(bit value);
+            has_checks = value;
+
+            // Mechanisism to ensure that the has_checks value is syncronize
+            // with the interface has_check variable
+            if (vif != null) begin
+                vif.has_checks = has_checks;
+            end
+        endfunction
+
         // UVM phase (it can be implemented because it's a uvm_component)
         virtual function void start_of_simulation_phase(uvm_phase phase);
             super.start_of_simulation_phase(phase);
@@ -53,6 +74,16 @@
             end
         endfunction
 
+        virtual task run_phase(uvm_phase phase);
+            // Mechanism to avoid the user to modify the has_check value from the interface
+            forever begin
+                @(vif.has_checks);
+                
+                if(vif.has_checks != get_has_checks()) begin
+                    `uvm_error("ALGORITHM_ISSUE", $sformatf("Can not change \"has_checks\" from APB interface directly - use %0s.set_has_checks()", get_full_name()))
+                end
+            end
+        endtask
     endclass
 
 `endif
