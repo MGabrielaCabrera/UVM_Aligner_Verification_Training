@@ -42,11 +42,17 @@
             setup_phase_s |-> penable == 0;
         endproperty
 
-        property penable_at_access_phase_p;
+        property penable_entering_access_phase_p;
             // The property is disable if reset or if has_checks is zero
             @(posedge pclk) disable iff (!preset_n || !has_checks)
             // In the next clock cycle (|=>) after setup phase, penable must be one
             setup_phase_s |=> penable == 1;
+        endproperty
+
+        property penable_exiting_access_phase_p;
+            // The property is disable if reset or if has_checks is zero
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            access_phase_s and (pready ==1) |=> penable == 0;
         endproperty
 
         PENABLE_AT_SETUP_PHASE_A: assert property(penable_at_setup_phase_p) else begin
@@ -56,8 +62,12 @@
                                                            // is to reuse them in formal verification
         end
 
-        PENABLE_AT_ACCESS_PHASE_A: assert property(penable_at_access_phase_p) else begin
-            $error("PENABLE at access phase is not equal to 1");
+        PENABLE_ENTERING_ACCESS_PHASE_A: assert property(penable_entering_access_phase_p) else begin
+            $error("PENABLE entering access phase is not equal to 1");
+        end
+
+        PENABLE_EXITING_ACCESS_PHASE_A: assert property(penable_exiting_access_phase_p) else begin
+            $error("PENABLE exiting access phase is not equal to 0");
         end
 
     endinterface
