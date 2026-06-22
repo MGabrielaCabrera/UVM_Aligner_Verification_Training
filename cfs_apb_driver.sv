@@ -69,9 +69,9 @@
             end
 
             // Once pready is one, we can deassert the signals
-            vif.paddr <= '0;
+            vif.paddr <= 0;
             vif.pwrite <= 0;
-            vif.pwdata <= '0;
+            vif.pwdata <= 0;
             vif.psel <= 0;
             vif.penable <= 0;
 
