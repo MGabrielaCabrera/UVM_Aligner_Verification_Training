@@ -73,7 +73,7 @@
                 `uvm_info("APB_CONFIG", "APB virtual interface configured successfully", UVM_LOW)
             end
         endfunction
-
+    
         virtual task run_phase(uvm_phase phase);
             // Mechanism to avoid the user to modify the has_check value from the interface
             forever begin

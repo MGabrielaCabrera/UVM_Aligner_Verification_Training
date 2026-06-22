@@ -26,6 +26,29 @@
             has_checks = 1;
         end
 
+        // Sequence for the setup phase
+        sequence setup_phase_s;
+            // We can have one single transaction or several in a row:
+            ((psel == 1) && ($past(psel) == 0)) || (($past(psel) == 1) && ($past(pready) == 1));
+        endsequence;
+
+        sequence access_phase_s;
+            ((psel == 1) && (penable == 1));
+        endsequence
+
+        property penable_at_setup_phase_p;
+            // The property is disable if reset or if has_checks is zero
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            // In the same clock cycle of the setup_phase, we should have penable
+            setup_phase_s |-> penable == 0;
+        endproperty
+
+        PENABLE_AT_SETUP_PHASE_A: assert property(penable_at_setup_phase_p) else begin
+            $error("PENABLE at setup phase is not equal to 0"); // $error is used here and not the uvm
+                                                               // library because one of the reasons 
+                                                               // of adding the assertions in the interface
+                                                               // is to reuse them in formal verification
+        end
 
     endinterface
 
