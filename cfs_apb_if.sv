@@ -39,15 +39,26 @@
         property penable_at_setup_phase_p;
             // The property is disable if reset or if has_checks is zero
             @(posedge pclk) disable iff (!preset_n || !has_checks)
-            // In the same clock cycle of the setup_phase, we should have penable
+            // In the same clock cycle (|->) of the setup_phase, we should have penable
             setup_phase_s |-> penable == 0;
+        endproperty
+
+        property penable_at_access_phase_p;
+            // The property is disable if reset or if has_checks is zero
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            // In the next clock cycle (|=>) after setup phase, penable must be one
+            setup_phase_s |=> penable == 1;
         endproperty
 
         PENABLE_AT_SETUP_PHASE_A: assert property(penable_at_setup_phase_p) else begin
             $error("PENABLE at setup phase is not equal to 0"); // $error is used here and not the uvm
                                                                // library because one of the reasons 
                                                                // of adding the assertions in the interface
-                                                               // is to reuse them in formal verification
+                                                           // is to reuse them in formal verification
+        end
+
+        PENABLE_AT_ACCESS_PHASE_A: assert property(penable_at_access_phase_p) else begin
+            $error("PENABLE at access phase is not equal to 1");
         end
 
     endinterface
