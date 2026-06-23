@@ -78,6 +78,47 @@
             access_phase_s and (pwrite == 1) |-> $stable(pwdata);
         endproperty
 
+        property unknown_value_psel_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            // isunknown returns one if the psel has an unknown value
+            $isunknown(psel) == 0;
+        endproperty
+
+        property unknown_value_penable_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            psel == 1 |-> $isunknown(penable) == 0;
+        endproperty
+
+        property unknown_value_pwrite_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            psel == 1 |-> $isunknown(pwrite) == 0;
+        endproperty
+    
+        property unknown_value_paddr_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            psel == 1 |-> $isunknown(paddr) == 0;
+        endproperty
+
+        property unknown_value_pwdata_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            (psel == 1) && (pwrite == 1) |-> $isunknown(pwdata) == 0;
+        endproperty
+
+        property unknown_value_prdata_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            (psel == 1) && (pwrite == 0) && (pready== 1) && (pslverr == 0)|-> $isunknown(prdata) == 0;
+        endproperty
+
+        property unknown_value_pready_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            psel == 1 |-> $isunknown(pready) == 0;
+        endproperty
+
+        property unknown_value_pslverr_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            (psel == 1) && (pready == 1) |-> $isunknown(pslverr) == 0;
+        endproperty
+
         PENABLE_AT_SETUP_PHASE_A: assert property(penable_at_setup_phase_p) else begin
             $error("PENABLE at setup phase is not equal to 0"); // $error is used here and not the uvm
                                                                // library because one of the reasons 
@@ -109,6 +150,40 @@
         PWDATA_STABLE_AT_ACCESS_PHASE_A: assert property(pwdata_stable_at_access_phase_p) else begin
             $error("PWDATA during access phase is not equal to 1");
         end
+
+        UNKNOWN_VALUE_PSEL_A: assert property(unknown_value_psel_p) else begin
+            $error("Detected unknown value for APB signal PSEL");
+        end
+
+        UNKNOWN_VALUE_PENABLE_A: assert property(unknown_value_penable_p) else begin
+            $error("Detected unknown value for APB signal PENABLE");
+        end 
+
+        UNKNOWN_VALUE_PWRITE_A: assert property(unknown_value_pwrite_p) else begin
+            $error("Detected unknown value for APB signal PWRITE");
+        end 
+
+        UNKNOWN_VALUE_PADDR_A: assert property(unknown_value_paddr_p) else begin
+            $error("Detected unknown value for APB signal PADDR");
+        end 
+
+        UNKNOWN_VALUE_PWDATA_A: assert property(unknown_value_pwdata_p) else begin
+            $error("Detected unknown value for APB signal PWDATA");
+        end 
+
+        UNKNOWN_VALUE_PRDATA_A: assert property(unknown_value_prdata_p) else begin
+            $error("Detected unknown value for APB signal PRDATA");
+        end 
+
+        UNKNOWN_VALUE_PREADY_A: assert property(unknown_value_pready_p) else begin
+            $error("Detected unknown value for APB signal PREADY");
+        end 
+
+        UNKNOWN_VALUE_PSLVERR_A: assert property(unknown_value_pslverr_p) else begin
+            $error("Detected unknown value for APB signal PSLVERR");
+        end 
+
+        
 
     endinterface
 
