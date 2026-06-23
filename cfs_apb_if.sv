@@ -55,6 +55,17 @@
             access_phase_s and (pready ==1) |=> penable == 0;
         endproperty
 
+        property penable_stable_at_access_phase_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            access_phase_s |-> penable == 1;
+        endproperty
+
+        property pwrite_stable_at_access_phase_p;
+            @(posedge pclk) disable iff (!preset_n || !has_checks)
+            // To ensure the value of pwrite is the same of the one before the previous clock cycle
+            access_phase_s |-> $stable(pwrite);
+        endproperty
+
         PENABLE_AT_SETUP_PHASE_A: assert property(penable_at_setup_phase_p) else begin
             $error("PENABLE at setup phase is not equal to 0"); // $error is used here and not the uvm
                                                                // library because one of the reasons 
@@ -68,6 +79,15 @@
 
         PENABLE_EXITING_ACCESS_PHASE_A: assert property(penable_exiting_access_phase_p) else begin
             $error("PENABLE exiting access phase is not equal to 0");
+        end
+
+
+        PENABLE_STABLE_AT_ACCESS_PHASE_A: assert property(penable_stable_at_access_phase_p) else begin
+            $error("PENABLE during access phase is not equal to 1");
+        end
+
+        PWRITE_STABLE_AT_ACCESS_PHASE_A: assert property(pwrite_stable_at_access_phase_p) else begin
+            $error("PWRITE during access phase is not equal to 1");
         end
 
     endinterface
