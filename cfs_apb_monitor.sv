@@ -58,6 +58,12 @@
             while(vif.pready == 0) begin
                 @(posedge vif.pclk);
                 item.length++;
+
+                if (agent_config.get_has_checks()) begin
+                    if (item.length > agent_config.get_stuck_threshold()) begin
+                        `uvm_error("PROTOCOL_ERROR", $sformatf("APB transfer reached the stuck threshold of %0d clock cycles", item.length))
+                    end
+                end
             end
 
             // We sample the response
