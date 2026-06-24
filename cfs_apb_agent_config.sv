@@ -14,6 +14,10 @@
         //Switch to enable the checks
         local bit has_checks;
 
+        // Number of clock cycles whoch an APB transfer is considered
+        // stuck and an error is triggered
+        local int unsigned stuck_threshold;
+
         `uvm_component_utils(cfs_apb_agent_config)
 
         function new(string name = "", uvm_component parent);
@@ -21,6 +25,7 @@
 
             active_passive = UVM_ACTIVE; // By default, we set the agent to active
             has_checks = 1; // By default, we enable the checks
+            stuck_threshold = 1000;
         endfunction
 
         virtual function cfs_apb_vif get_vif();
@@ -61,6 +66,18 @@
                 vif.has_checks = has_checks;
             end
         endfunction
+
+        virtual function void set_stuck_threshold(int unsigned value);
+            if (value <= 2) begin
+                `uvm_error("ALGORITHM_ISSUE", "The stuck threshold must be greater than 2 clock cycles")
+            end
+            stuck_threshold = value;
+        endfunction
+
+        virtual function int unsigned get_stuck_threshold();
+            return stuck_threshold;
+        endfunction
+
 
         // UVM phase (it can be implemented because it's a uvm_component)
         virtual function void start_of_simulation_phase(uvm_phase phase);
