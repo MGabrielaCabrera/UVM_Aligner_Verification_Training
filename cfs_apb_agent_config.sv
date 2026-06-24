@@ -14,6 +14,9 @@
         //Switch to enable the checks
         local bit has_checks;
 
+        //Switch to enable coverage
+        local bit has_coverage;
+
         // Number of clock cycles whoch an APB transfer is considered
         // stuck and an error is triggered
         local int unsigned stuck_threshold;
@@ -26,6 +29,7 @@
             active_passive = UVM_ACTIVE; // By default, we set the agent to active
             has_checks = 1; // By default, we enable the checks
             stuck_threshold = 1000;
+            has_coverage =1;
         endfunction
 
         virtual function cfs_apb_vif get_vif();
@@ -65,6 +69,14 @@
             if (vif != null) begin
                 vif.has_checks = has_checks;
             end
+        endfunction
+
+        virtual function bit get_has_coverage();
+            return has_coverage;
+        endfunction
+
+        virtual function void set_has_coverage(bit value);
+            has_coverage = value;
         endfunction
 
         virtual function void set_stuck_threshold(int unsigned value);

@@ -14,6 +14,7 @@
         `include "cfs_apb_item_base.sv"
         `include "cfs_apb_item_drv.sv"
         `include "cfs_apb_item_mon.sv"
+        `include "cfs_apb_coverage.sv"
         `include "cfs_apb_sequencer.sv"
         `include "cfs_apb_sequence_base.sv"
         `include "cfs_apb_sequence_simple.sv"

@@ -12,6 +12,9 @@
         // Monitor handler
         cfs_apb_monitor monitor;
 
+        // Coverage handler
+        cfs_apb_coverage coverage;
+
         `uvm_component_utils(cfs_apb_agent)
 
         function new(string name = "", uvm_component parent);
@@ -24,6 +27,10 @@
             agent_config = cfs_apb_agent_config::type_id::create("agent_config", this);
             
             monitor = cfs_apb_monitor::type_id::create("monitor", this);
+
+            if (agent_config.get_has_coverage()) begin
+                coverage = cfs_apb_coverage::type_id::create("coverage", this);
+            end
 
             // We check if the agent is active or passive, and we create the sequencer
             // and driver only if it's active
@@ -45,6 +52,12 @@
             end
 
             monitor.agent_config = agent_config;
+            
+            // Connection between the monitor and the coverage component, if coverage is enabled
+            if(agent_config.get_has_coverage()) begin
+                monitor.output_port.connect(coverage.port_item);
+            end
+
 
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
                 
