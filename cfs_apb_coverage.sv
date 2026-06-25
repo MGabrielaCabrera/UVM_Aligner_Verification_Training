@@ -29,9 +29,20 @@
             cover_item.set_inst_name($sformatf("%s_%s",get_full_name(), "cover_item"));
         endfunction
         
-        // Function associated with port_item port
+
+        // Method to visualize the coverage result in edaplayground
+        virtual function string coverage2string();
+            string result = {$sformatf("\n   cover_item:              %03.2f%%", cover_item.get_inst_coverage()),
+                            $sformatf("\n      direction:              %03.2f%%", cover_item.direction.get_inst_coverage())};
+            return result;
+        endfunction
+
+        // Function associated with port_item port (fixed callback method name)
         virtual function void write_item(cfs_apb_item_mon item);
             cover_item.sample(item);
+
+            // This is done because the coverage cannot be seen in edaplayground
+            `uvm_info("DEBUG", $sformatf("Coverage: %0s", coverage2string()), UVM_NONE)
         endfunction
         
   
