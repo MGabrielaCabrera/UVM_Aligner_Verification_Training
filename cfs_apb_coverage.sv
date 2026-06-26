@@ -16,7 +16,22 @@
 
             direction: coverpoint item.dir {
                 option.comment = "Direction of the APB transfer";
+            }
 
+            length: coverpoint item.length {
+                option.comment = "Length of the APB transfer";
+
+                bins length_eq_2 = {2}; // Shortest length possible
+                bins length_le_20[8] = {[3:10]};
+                bins length_gt_10 = {[11:$]};
+            }
+
+            prev_item_delay: coverpoint item.prev_item_delay {
+                option.comment = "Delay, in clock cycles, between two consecutive APB accesses";
+
+                bins back2back = {0};
+                bins delay_le_5[5] = {[1:5]};
+                bins delay_gt_6 = {[6:$]};
             }
         endgroup
 
@@ -32,8 +47,11 @@
 
         // Method to visualize the coverage result in edaplayground
         virtual function string coverage2string();
-            string result = {$sformatf("\n   cover_item:              %03.2f%%", cover_item.get_inst_coverage()),
-                            $sformatf("\n      direction:              %03.2f%%", cover_item.direction.get_inst_coverage())};
+            string result = {$sformatf("\n   cover_item:               %03.2f%%", cover_item.get_inst_coverage()),
+                            $sformatf("\n      direction:              %03.2f%%", cover_item.direction.get_inst_coverage()),
+                            $sformatf("\n      length:                 %03.2f%%", cover_item.length.get_inst_coverage()),
+                            $sformatf("\n      prev_item_delay:        %03.2f%%", cover_item.prev_item_delay.get_inst_coverage())
+                            };
             return result;
         endfunction
 
