@@ -65,7 +65,6 @@
         cfs_apb_cover_index_wrapper#(`CFS_APB_MAX_DATA_WIDTH) wrap_cover_rd_data_1;
 
 
-
         `uvm_component_utils(cfs_apb_coverage)
 
         covergroup cover_item with function sample(cfs_apb_item_mon item);
@@ -90,6 +89,18 @@
                 bins delay_le_5[5] = {[1:5]};
                 bins delay_gt_6 = {[6:$]};
             }
+
+            response: coverpoint item.response {
+                option.comment = "Response of the APB access";
+            }
+
+            response_x_direction: cross response, direction;
+
+            trans_direction: coverpoint item.dir {
+                option.comment = "Transition of the APB direction";
+                bins direction_trans[] = (CFS_APB_READ, CFS_APB_WRITE => CFS_APB_READ, CFS_APB_WRITE);
+            }
+
         endgroup
 
 
@@ -117,6 +128,8 @@
                             $sformatf("\n      direction:              %03.2f%%", cover_item.direction.get_inst_coverage()),
                             $sformatf("\n      length:                 %03.2f%%", cover_item.length.get_inst_coverage()),
                             $sformatf("\n      prev_item_delay:        %03.2f%%", cover_item.prev_item_delay.get_inst_coverage()),
+                            $sformatf("\n      response_x_direction:   %03.2f%%", cover_item.response_x_direction.get_inst_coverage()),
+                            $sformatf("\n      trans_direction:        %03.2f%%", cover_item.trans_direction.get_inst_coverage()),
                             $sformatf("\n      wrap_cover_addr_0:      %0s", wrap_cover_addr_0.coverage2string()),
                             $sformatf("\n      wrap_cover_addr_1:      %0s", wrap_cover_addr_1.coverage2string()),
                             $sformatf("\n      wrap_cover_wr_data_0:   %0s", wrap_cover_wr_data_0.coverage2string()),
