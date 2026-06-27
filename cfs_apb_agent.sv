@@ -56,6 +56,7 @@
             // Connection between the monitor and the coverage component, if coverage is enabled
             if(agent_config.get_has_coverage()) begin
                 monitor.output_port.connect(coverage.port_item);
+                coverage.agent_config = agent_config;
             end
 
 
