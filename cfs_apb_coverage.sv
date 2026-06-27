@@ -45,6 +45,8 @@
     endclass
 
     class cfs_apb_coverage extends uvm_component;
+
+        cfs_apb_agent_config agent_config;
         
         //Port to receiving the collected items
         uvm_analysis_imp_item#(cfs_apb_item_mon, cfs_apb_coverage) port_item;
@@ -63,7 +65,6 @@
         cfs_apb_cover_index_wrapper#(`CFS_APB_MAX_DATA_WIDTH) wrap_cover_rd_data_0;
 
         cfs_apb_cover_index_wrapper#(`CFS_APB_MAX_DATA_WIDTH) wrap_cover_rd_data_1;
-
 
         `uvm_component_utils(cfs_apb_coverage)
 
@@ -103,6 +104,14 @@
 
         endgroup
 
+        covergroup cover_reset with function sample(bit psel);
+            option.per_instance = 1; // One covergroup instance per agent instance
+
+            access_ongoing: coverpoint psel {
+                option.comment = "An APB access was ongoing at reset";
+            }
+        endgroup
+
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
@@ -110,6 +119,8 @@
             port_item = new("port_item", this);
             cover_item = new();
             cover_item.set_inst_name($sformatf("%s_%s",get_full_name(), "cover_item"));
+            cover_reset = new();
+            cover_reset.set_inst_name($sformatf("%s_%s",get_full_name(), "cover_reset"));
         endfunction
         
         virtual function void build_phase(uvm_phase phase);
@@ -122,6 +133,15 @@
         
         endfunction
 
+        virtual task run_phase(uvm_phase phase);
+            cfs_apb_vif vif = agent_config.get_vif();
+
+            forever begin
+                @(negedge vif.preset_n);
+                cover_reset.sample(vif.psel);
+            end
+        endtask
+
         // Method to visualize the coverage result in edaplayground
         virtual function string coverage2string();
             string result = {$sformatf("\n   cover_item:               %03.2f%%", cover_item.get_inst_coverage()),
@@ -130,6 +150,8 @@
                             $sformatf("\n      prev_item_delay:        %03.2f%%", cover_item.prev_item_delay.get_inst_coverage()),
                             $sformatf("\n      response_x_direction:   %03.2f%%", cover_item.response_x_direction.get_inst_coverage()),
                             $sformatf("\n      trans_direction:        %03.2f%%", cover_item.trans_direction.get_inst_coverage()),
+                            $sformatf("\n      cover_reset:            %03.2f%%", cover_reset.get_inst_coverage()),
+                            $sformatf("\n      access_ongoing:         %03.2f%%", cover_reset.access_ongoing.get_inst_coverage()),
                             $sformatf("\n      wrap_cover_addr_0:      %0s", wrap_cover_addr_0.coverage2string()),
                             $sformatf("\n      wrap_cover_addr_1:      %0s", wrap_cover_addr_1.coverage2string()),
                             $sformatf("\n      wrap_cover_wr_data_0:   %0s", wrap_cover_wr_data_0.coverage2string()),
