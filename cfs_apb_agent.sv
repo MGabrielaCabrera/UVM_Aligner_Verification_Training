@@ -1,7 +1,8 @@
 `ifndef CFS_APB_AGENT_SV
     `define CFS_APB_AGENT_SV
-
-    class cfs_apb_agent extends uvm_agent;
+    
+    // Implements means that all the functions in the interface class must be implemented
+    class cfs_apb_agent extends uvm_agent implements cfs_apb_reset_handler;
 
         cfs_apb_agent_config agent_config;
         
@@ -71,8 +72,42 @@
 
 
         endfunction
+       
+        virtual function void handler_reset(uvm_phase phase);
+            uvm_component children[$];
+            
+            // The children are the atributes created in the agent hierarchy using "this" as parent
+            get_children(children);
+            
+            foreach(children[idx]) begin
+                cfs_apb_reset_handler reset_handler;
+                
+                // If the chindren can be casted to cfs_apb_reset_handler
+                if($cast(reset_handler, children[idx])) begin
+                    // Each children execute their handler_reset method
+                    reset_handler.handler_reset(phase);
+                end
+            end
 
+        endfunction
 
+        // Task for waiting the reset to start (asynchronous)
+        virtual task wait_reset_start();
+            agent_config.wait_reset_start();
+        endtask
+
+        // Task for waiting the reset to end (synchronous)
+        virtual task wait_reset_end();
+            agent_config.wait_reset_end();
+        endtask
+
+        virtual task run_phase(uvm_phase phase);
+            forever begin
+                wait_reset_start();
+                handler_reset(phase);
+                wait_reset_end();
+            end
+        endtask
     endclass
 
 `endif

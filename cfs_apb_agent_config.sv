@@ -113,6 +113,21 @@
                 end
             end
         endtask
+
+        // Task for waiting the reset to start (asynchronous)
+        virtual task wait_reset_start();
+            if(vif.preset_n !== 0) begin
+                @(negedge vif.preset_n);
+            end
+        endtask
+
+        // Task for waiting the reset to end (synchronous)
+        virtual task wait_reset_end();
+            while (vif.preset_n == 0) begin
+                @(posedge vif.pclk);
+            end
+        endtask
+    
     endclass
 
 `endif
