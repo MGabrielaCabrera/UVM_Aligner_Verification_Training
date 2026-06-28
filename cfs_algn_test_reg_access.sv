@@ -27,6 +27,27 @@
             #100ns;
 
             fork 
+                // To force a reset in the middle of the transfers
+                begin
+                    cfs_apb_vif vif = env.apb_agent.agent_config.get_vif();
+                    
+                    // We wait for 3 apb accesses to start
+                    repeat(3) begin
+                        @(posedge vif.psel);
+                    end
+                    
+                    // During the third access we wait 11 ns
+                    #11ns;
+
+                    vif.preset_n <= 0;
+
+                    repeat(4) begin
+                        @(posedge vif.pclk);
+                    end
+
+                    vif.preset_n <= 1;
+                end
+                    
                 begin // Sequence simple
                     cfs_apb_sequence_simple seq_simple;
                     seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
