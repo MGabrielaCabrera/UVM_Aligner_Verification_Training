@@ -44,7 +44,7 @@
 
     endclass
 
-    class cfs_apb_coverage extends uvm_component;
+    class cfs_apb_coverage extends uvm_component implements cfs_apb_reset_handler;
 
         cfs_apb_agent_config agent_config;
         
@@ -133,14 +133,11 @@
         
         endfunction
 
-        virtual task run_phase(uvm_phase phase);
+        virtual function void handler_reset(uvm_phase phase);
             cfs_apb_vif vif = agent_config.get_vif();
+            cover_reset.sample(vif.psel);
 
-            forever begin
-                @(negedge vif.preset_n);
-                cover_reset.sample(vif.psel);
-            end
-        endtask
+        endfunction
 
         // Method to visualize the coverage result in edaplayground
         virtual function string coverage2string();
