@@ -16,5 +16,12 @@
         logic[OFFSET_WIDTH-1:0] offset;
         logic[SIZE_WIDTH-1:0] size;
         logic err;  
+
+        bit has_checks;
+
+        initial begin
+            has_checks = 1;
+        end
+
     endinterface
 `endif
