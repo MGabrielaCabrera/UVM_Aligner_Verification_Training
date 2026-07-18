@@ -42,7 +42,7 @@
                 set_has_checks(get_has_checks());
             end
             else begin
-                `uvm_fatal("ALGORITHM_ISSUE", "Trying to set the APB virtual interface more than once")
+                `uvm_fatal("ALGORITHM_ISSUE", "Trying to set the MD virtual interface more than once")
             end
         endfunction
 
@@ -76,6 +76,30 @@
             has_coverage = value;
         endfunction
 
+        // Task for waiting the reset to start (asynchronous)
+        virtual task wait_reset_start();
+            if(vif.reset_n !== 0) begin
+                @(negedge vif.reset_n);
+            end
+        endtask
+
+        // Task for waiting the reset to end (synchronous)
+        virtual task wait_reset_end();
+            while (vif.reset_n == 0) begin
+                @(posedge vif.clk);
+            end
+        endtask
+
+        virtual task run_phase(uvm_phase phase);
+            // Mechanism to avoid the user to modify the has_check value from the interface
+            forever begin
+                @(vif.has_checks);
+                
+                if(vif.has_checks != get_has_checks()) begin
+                    `uvm_error("ALGORITHM_ISSUE", $sformatf("Can not change \"has_checks\" from MD interface directly - use %0s.set_has_checks()", get_full_name()))
+                end
+            end
+        endtask
 
     endclass 
 `endif
