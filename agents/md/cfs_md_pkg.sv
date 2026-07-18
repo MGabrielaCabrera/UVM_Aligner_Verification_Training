@@ -8,6 +8,9 @@
         `include "cfs_md_agent_config.sv"
         `include "cfs_md_agent_config_slave.sv"
         `include "cfs_md_agent_config_master.sv"
+        `include "cfs_md_reset_handler.sv"
+        `include "cfs_md_agent.sv"
+
 
 
     endpackage
