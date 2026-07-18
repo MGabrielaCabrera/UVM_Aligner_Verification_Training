@@ -3,6 +3,10 @@
         class cfs_algn_env extends uvm_env;
 
             cfs_apb_agent apb_agent;
+
+            cfs_md_agent_master#(32) md_agent_master;
+
+            cfs_md_agent_slave#(32) md_agent_slave;
     
             // Mandatory for all the test classes to have the UVM macro to register
             // the class with the factory, enabling the core UVM infrastructure 
@@ -18,6 +22,10 @@
                 super.build_phase(phase);
                 // We create the APB agent and set it as a child of the environment
                 apb_agent = cfs_apb_agent::type_id::create("apb_agent", this);
+            
+                // MD agents
+                md_agent_master = cfs_md_agent_master#(32)::type_id::create("md_agent_master", this);
+                md_agent_slave = cfs_md_agent_slave#(32)::type_id::create("md_agent_slave", this);
             endfunction
         endclass
 `endif
