@@ -10,6 +10,8 @@
         `include "cfs_md_agent_config_master.sv"
         `include "cfs_md_reset_handler.sv"
         `include "cfs_md_agent.sv"
+        `include "cfs_md_agent_slave.sv"
+        `include "cfs_md_agent_master.sv"
 
 
 
