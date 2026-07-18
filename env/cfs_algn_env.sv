@@ -1,18 +1,18 @@
 `ifndef CFS_ALGN_ENV_SV
     `define CFS_ALGN_ENV_SV
-        class cfs_algn_env extends uvm_env;
+        class cfs_algn_env#(int ALGN_DATA_WIDTH = 32) extends uvm_env;
 
             cfs_apb_agent apb_agent;
 
-            cfs_md_agent_master#(32) md_agent_master;
+            cfs_md_agent_master#(ALGN_DATA_WIDTH) md_agent_master;
 
-            cfs_md_agent_slave#(32) md_agent_slave;
+            cfs_md_agent_slave#(ALGN_DATA_WIDTH) md_agent_slave;
     
             // Mandatory for all the test classes to have the UVM macro to register
             // the class with the factory, enabling the core UVM infrastructure 
             // to work with your component.
             // The argument is the name of the class
-            `uvm_component_utils(cfs_algn_env)
+            `uvm_component_param_utils(cfs_algn_env#(ALGN_DATA_WIDTH))
     
             function new(string name = "", uvm_component parent);
                 super.new(name, parent);
@@ -24,8 +24,8 @@
                 apb_agent = cfs_apb_agent::type_id::create("apb_agent", this);
             
                 // MD agents
-                md_agent_master = cfs_md_agent_master#(32)::type_id::create("md_agent_master", this);
-                md_agent_slave = cfs_md_agent_slave#(32)::type_id::create("md_agent_slave", this);
+                md_agent_master = cfs_md_agent_master#(ALGN_DATA_WIDTH)::type_id::create("md_agent_master", this);
+                md_agent_slave = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_agent_slave", this);
             endfunction
         endclass
 `endif
