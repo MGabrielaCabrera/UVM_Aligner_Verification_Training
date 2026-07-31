@@ -13,6 +13,7 @@
         `include "cfs_md_item_drv.sv"
         `include "cfs_md_item_drv_master.sv"
         `include "cfs_md_sequencer.sv"
+        `include "cfs_md_sequencer_master.sv"
         `include "cfs_md_agent.sv"
         `include "cfs_md_agent_slave.sv"
         `include "cfs_md_agent_master.sv"
