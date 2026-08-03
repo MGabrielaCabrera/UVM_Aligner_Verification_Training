@@ -1,0 +1,17 @@
+`ifndef CFS_MD_SEQUENCE_BASE_SV
+    `define CFS_MD_SEQUENCE_BASE_SV
+
+    class cfs_md_sequence_base#(type ITEM_DRV = cfs_md_item_drv) extends uvm_sequence#(.REQ(ITEM_DRV));
+        
+        // Declaring p_sequecer using a macro
+        `uvm_declare_p_sequencer(cfs_md_sequencer#(ITEM_DRV))
+
+        // Sequence is an object:
+        `uvm_object_param_utils(cfs_md_sequence_base)
+
+        function new(string name = "");
+            super.new(name);
+        endfunction
+
+    endclass
+`endif
