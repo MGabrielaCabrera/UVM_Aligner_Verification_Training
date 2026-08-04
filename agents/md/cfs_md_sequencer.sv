@@ -3,7 +3,7 @@
 
     class cfs_md_sequencer#(type ITEM_DRV = cfs_md_item_drv) extends uvm_sequencer#(.REQ(ITEM_DRV)) implements cfs_md_reset_handler;
 
-        `uvm_component_utils(cfs_md_sequencer#(ITEM_DRV))
+        `uvm_component_param_utils(cfs_md_sequencer#(ITEM_DRV))
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
