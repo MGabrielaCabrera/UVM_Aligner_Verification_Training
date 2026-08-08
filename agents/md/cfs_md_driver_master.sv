@@ -57,18 +57,19 @@
                 @(posedge vif.clk);
             end
             endtask
+        endtask
 
-        virtual function void handle_reset(uvm_phase phase);
+        virtual function void handler_reset(uvm_phase phase);
             cfs_md_vif vif = agent_config.get_vif();
             
-            super.handle_reset(phase);
+            super.handler_reset(phase);
             
             vif.valid  <= 0;
             vif.data   <= 0;
             vif.offset <= 0;
             vif.size   <= 0;
-            endfunction
-        endtask
+        endfunction
+
 
     endclass
 

@@ -8,6 +8,8 @@
 
         cfs_md_agent_config#(DATA_WIDTH) agent_config;
 
+        cfs_md_driver#(ITEM_DRV) driver;
+
         cfs_md_sequencer#(ITEM_DRV) sequencer;
 
         `uvm_component_param_utils(cfs_md_agent#(DATA_WIDTH, ITEM_DRV))
@@ -23,6 +25,7 @@
 
             // We create the sequencer and set it as a child of the agent
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
+                driver = cfs_md_driver#(ITEM_DRV)::type_id::create("driver", this);
                 sequencer = cfs_md_sequencer#(ITEM_DRV)::type_id::create("sequencer", this);
             end
         endfunction
@@ -37,6 +40,12 @@
             else begin
                 agent_config.set_vif(vif);
             end
+
+            if (agent_config.get_active_passive() == UVM_ACTIVE) begin
+                driver.seq_item_port.connect(sequencer.seq_item_export);
+                driver.agent_config = agent_config;
+            end
+
 
         endfunction
        
