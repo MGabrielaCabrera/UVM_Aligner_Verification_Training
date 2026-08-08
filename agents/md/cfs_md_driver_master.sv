@@ -21,6 +21,53 @@
                 `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Trying to drive an item with offset %0d and %0d bytes but the width of the data bus, in bytes, is %0d", item.offset, item.data.size(), data_width_in_bytes))
             end
 
+            for(int i = 0; i < item.pre_drive_delay; i++) begin
+                @(posedge vif.clk);
+            end
+
+            vif.valid  <= 1;
+            
+            begin
+                bit[DATA_WIDTH-1:0] data = 0;
+                
+                foreach(item.data[idx]) begin
+                bit[DATA_WIDTH-1:0] temp = item.data[idx] << ((item.offset + idx) * 8);
+                
+                data = data | temp;
+                end
+                
+                vif.data <= data;
+            end
+            
+            vif.offset <= item.offset;
+            vif.size   <= item.data.size();
+            
+            @(posedge vif.clk);
+
+            while(vif.ready !== 1) begin
+                @(posedge vif.clk);
+            end
+
+            vif.valid  <= 0;
+            vif.data   <= 0;
+            vif.offset <= 0;
+            vif.size   <= 0;
+            
+            for(int i = 0; i < item.post_drive_delay; i++) begin
+                @(posedge vif.clk);
+            end
+            endtask
+
+        virtual function void handle_reset(uvm_phase phase);
+            cfs_md_vif vif = agent_config.get_vif();
+            
+            super.handle_reset(phase);
+            
+            vif.valid  <= 0;
+            vif.data   <= 0;
+            vif.offset <= 0;
+            vif.size   <= 0;
+            endfunction
         endtask
 
     endclass
