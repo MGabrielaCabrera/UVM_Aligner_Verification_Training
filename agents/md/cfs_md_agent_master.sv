@@ -2,7 +2,7 @@
     `define CFS_MD_AGENT_MASTER_SV
     
     // Implements means that all the functions in the interface class must be implemented
-    class cfs_md_agent_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_agent#(DATA_WIDTH);
+    class cfs_md_agent_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_agent#(DATA_WIDTH, cfs_md_item_drv_master);
 
         `uvm_component_param_utils(cfs_md_agent_master#(DATA_WIDTH))
 
