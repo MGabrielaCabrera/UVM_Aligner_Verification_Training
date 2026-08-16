@@ -18,6 +18,9 @@
         //Switch to enable coverage
         local bit has_coverage;
 
+        // Delay used when detecting start of an MD transaction in the monitor
+        local time sample_delay_start_tr;
+
         `uvm_component_utils(cfs_md_agent_config)
 
         function new(string name = "", uvm_component parent);
@@ -26,6 +29,7 @@
             active_passive = UVM_ACTIVE; // By default, we set the agent to active
             has_checks = 1; // By default, we enable the checks
             has_coverage =1;
+            sample_delay_start_tr = 1ns; // By default, we set the sample delay to 0
         endfunction
 
 
@@ -66,6 +70,14 @@
             if (vif != null) begin
                 vif.has_checks = has_checks;
             end
+        endfunction
+
+        virtual function time get_sample_delay_start_tr();
+            return sample_delay_start_tr;
+        endfunction
+
+        virtual function void set_sample_delay_start_tr(time value);
+            sample_delay_start_tr = value;
         endfunction
 
         virtual function bit get_has_coverage();

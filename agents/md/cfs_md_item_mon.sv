@@ -3,7 +3,7 @@
 
     class cfs_md_item_mon extends cfs_md_item_base;
 
-        int unsigned prev_item_data;
+        int unsigned prev_item_delay;
 
         int unsigned length;
 
