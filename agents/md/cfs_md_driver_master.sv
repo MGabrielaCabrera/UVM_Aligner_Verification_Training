@@ -11,7 +11,7 @@
             super.new(name, parent);
         endfunction
 
-        protected virtual task driver_transaction(ITEM_DRV item);
+        protected virtual task driver_transaction(cfs_md_item_drv_master item);
             cfs_md_vif vif = agent_config.get_vif();
             int unsigned data_width_in_bytes = DATA_WIDTH / 8;
 
