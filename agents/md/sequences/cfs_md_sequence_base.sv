@@ -7,7 +7,7 @@
         `uvm_declare_p_sequencer(cfs_md_sequencer_base#(ITEM_DRV))
 
         // Sequence is an object:
-        `uvm_object_param_utils(cfs_md_sequence_base)
+        `uvm_object_param_utils(cfs_md_sequence_base#(ITEM_DRV))
 
         function new(string name = "");
             super.new(name);
