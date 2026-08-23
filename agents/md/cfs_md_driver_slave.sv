@@ -5,10 +5,30 @@
 
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
+        cfs_md_agent_config_slave#(DATA_WIDTH) agent_config; // We cannot use cfs_md_agent_config because if does not
+                                                             // have the ready_at_reset property that we need to set 
+                                                             // the ready signal at reset
+
+
         `uvm_component_param_utils(cfs_md_driver_slave#(DATA_WIDTH))
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
+        endfunction
+
+        // We declare the agent_config here because at this phase the agent_config is already (in the agent) created and we can cast it to the correct type
+        virtual function void end_of_elaboration_phase(uvm_phase phase);
+
+            super.end_of_elaboration_phase(phase);
+      
+            if(super.agent_config == null) begin
+                `uvm_fatal("ALGORITHM_ISSUE", $sformatf("At this point the pointer to agent_config from %0s should not be null", get_full_name()))
+            end
+      
+            if($cast(agent_config, super.agent_config) == 0) begin
+                `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Could not cast %0s to %0s", super.agent_config.get_full_name(), cfs_md_agent_config_slave#(DATA_WIDTH)::type_id::type_name))
+            end
+      
         endfunction
 
         protected virtual task driver_transaction(cfs_md_item_drv_slave item);
@@ -35,9 +55,12 @@
         endtask
 
         virtual function void handler_reset(uvm_phase phase);
-            
+            cfs_md_vif vif = agent_config.get_vif();
+
             super.handler_reset(phase);
             
+            vif.ready <= agent_config.get_ready_at_reset();
+            vif.err   <= 0;
         endfunction
 
 
