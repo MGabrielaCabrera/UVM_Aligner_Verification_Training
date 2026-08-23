@@ -19,9 +19,8 @@
         endfunction
 
         virtual function string convert2string();
-
-            result = $sformatf("length: %0d, response: %0s, ready_at_end: %0d", length, response.name(), ready_at_end);
-            return result;
+             
+            return $sformatf("length: %0d, response: %0s, ready_at_end: %0d", length, response.name(), ready_at_end);
             
         endfunction
 
