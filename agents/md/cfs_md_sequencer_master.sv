@@ -1,7 +1,7 @@
 `ifndef CFS_MD_SEQUENCER_MASTER_SV
     `define CFS_MD_SEQUENCER_MASTER_SV
 
-    class cfs_md_sequencer_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_sequencer#(.ITEM_DRV(cfs_md_item_drv_master));
+    class cfs_md_sequencer_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_sequencer_base#(.ITEM_DRV(cfs_md_item_drv_master));
 
         `uvm_component_param_utils(cfs_md_sequencer_master#(DATA_WIDTH))
 
