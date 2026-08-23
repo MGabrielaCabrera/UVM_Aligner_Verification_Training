@@ -1,9 +1,9 @@
-`ifndef CFS_MD_SEQUENCER_SV
-    `define CFS_MD_SEQUENCER_SV
+`ifndef CFS_MD_SEQUENCER_BASE_SV
+    `define CFS_MD_SEQUENCER_BASE_SV
 
-    class cfs_md_sequencer#(type ITEM_DRV = cfs_md_item_drv) extends uvm_sequencer#(.REQ(ITEM_DRV)) implements cfs_md_reset_handler;
+    class cfs_md_sequencer_base#(type ITEM_DRV = cfs_md_item_drv) extends uvm_sequencer#(.REQ(ITEM_DRV)) implements cfs_md_reset_handler;
 
-        `uvm_component_param_utils(cfs_md_sequencer#(ITEM_DRV))
+        `uvm_component_param_utils(cfs_md_sequencer_base#(ITEM_DRV))
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);

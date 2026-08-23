@@ -10,7 +10,7 @@
 
         cfs_md_driver#(ITEM_DRV) driver;
 
-        cfs_md_sequencer#(ITEM_DRV) sequencer;
+        cfs_md_sequencer_base#(ITEM_DRV) sequencer;
 
         cfs_md_monitor#(DATA_WIDTH) monitor;
 
@@ -30,7 +30,7 @@
             // We create the sequencer and set it as a child of the agent
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
                 driver = cfs_md_driver#(ITEM_DRV)::type_id::create("driver", this);
-                sequencer = cfs_md_sequencer#(ITEM_DRV)::type_id::create("sequencer", this);
+                sequencer = cfs_md_sequencer_base#(ITEM_DRV)::type_id::create("sequencer", this);
             end
         endfunction
 
