@@ -18,6 +18,7 @@
         `include "cfs_md_sequencer_base.sv"
         `include "cfs_md_sequencer_master_base.sv"
         `include "cfs_md_sequencer_master.sv"
+        `include "cfs_md_sequencer_slave_base.sv"
         `include "cfs_md_driver.sv"
         `include "cfs_md_driver_master.sv"
         `include "cfs_md_driver_slave.sv"
