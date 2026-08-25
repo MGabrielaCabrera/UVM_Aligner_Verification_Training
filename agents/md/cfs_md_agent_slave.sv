@@ -14,5 +14,18 @@
             cfs_md_sequencer_base#(cfs_md_item_drv_slave)::type_id::set_inst_override(cfs_md_sequencer_slave#(DATA_WIDTH)::get_type(),"sequencer", this);
 
         endfunction
+        
+        // Function to connect the output port from the monitor to the sequencer
+        protected virtual function void connect_port_from_mon_to_slave_seqr();
+            if(agent_config.get_active_passive() == UVM_ACTIVE) begin
+                cfs_md_sequencer_slave#(DATA_WIDTH) sequencer;
+                
+                if($cast(sequencer, super.sequencer) == 0) begin
+                    `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Could not cast %0s to %0s", super.sequencer.get_full_name(), cfs_md_sequencer_slave#(DATA_WIDTH)::type_id::type_name))
+                end
+
+                monitor.output_port.connect(sequencer.port_from_mon);
+            end
+        endfunction
     endclass
 `endif
