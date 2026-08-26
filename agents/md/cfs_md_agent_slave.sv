@@ -15,6 +15,11 @@
 
         endfunction
         
+        virtual function void connect_phase(uvm_phase phase);
+            super.connect_phase(phase);
+            connect_port_from_mon_to_slave_seqr();
+        endfunction
+
         // Function to connect the output port from the monitor to the sequencer
         protected virtual function void connect_port_from_mon_to_slave_seqr();
             if(agent_config.get_active_passive() == UVM_ACTIVE) begin
