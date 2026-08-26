@@ -1,0 +1,17 @@
+`ifndef CFS_MD_SEQUENCE_BASE_MASTER_SV
+    `define CFS_MD_SEQUENCE_BASE_MASTER_SV
+
+    class cfs_md_sequence_base_master extends cfs_md_sequence_base#(.ITEM_DRV(cfs_md_item_drv_master));
+
+        // Declaring p_sequecer using a macro
+        `uvm_declare_p_sequencer(cfs_md_sequencer_base#(ITEM_DRV))
+
+        `uvm_object_utils(cfs_md_sequence_base_master)
+
+        function new(string name = "");
+            super.new(name);
+ 
+        endfunction
+
+
+    endclass

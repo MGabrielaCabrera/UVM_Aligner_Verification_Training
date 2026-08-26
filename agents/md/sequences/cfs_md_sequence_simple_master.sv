@@ -1,7 +1,7 @@
 `ifndef CFS_MD_SEQUENCE_SIMPLE_MASTER_SV
     `define CFS_MD_SEQUENCE_SIMPLE_MASTER_SV
 
-    class cfs_md_sequence_simple_master extends cfs_md_sequence_base#(cfs_md_item_drv_master);
+    class cfs_md_sequence_simple_master extends cfs_md_sequence_base_master;
         rand cfs_md_item_drv_master item;
 
         constraint item_hard {

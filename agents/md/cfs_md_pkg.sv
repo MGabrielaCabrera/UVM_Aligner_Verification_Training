@@ -28,6 +28,7 @@
         `include "cfs_md_agent_slave.sv"
         `include "cfs_md_agent_master.sv"
         `include "cfs_md_sequence_base.sv"
+        `include "cfs_md_sequence_base_master.sv"
         `include "cfs_md_sequence_simple_master.sv"
 
 

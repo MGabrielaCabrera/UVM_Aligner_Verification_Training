@@ -4,7 +4,7 @@
     class cfs_md_sequencer_slave_base extends cfs_md_sequencer_base#(.ITEM_DRV(cfs_md_item_drv_slave));
 
         // Port for receiving item from the monitor
-        uvm_analysis_imp#(cfs_md_item_mon, cfs_md_sequencer_base_slave) port_from_mon;
+        uvm_analysis_imp#(cfs_md_item_mon, cfs_md_sequencer_slave_base) port_from_mon;
 
         // Pending items FIFO
         uvm_tlm_fifo#(cfs_md_item_mon) pending_items;
