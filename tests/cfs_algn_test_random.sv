@@ -26,6 +26,14 @@ class cfs_algn_test_random extends cfs_algn_test_base;
  
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
+            
+            // In the background:
+            fork 
+                begin
+                    cfs_md_sequence_response_forever_slave seq = cfs_md_sequence_response_forever_slave::type_id::create("seq");
+                    seq.start(env.md_tx_agent.sequencer);
+                end
+            join_none
 
             repeat(4) begin
                 cfs_md_sequence_simple_master seq_simple = cfs_md_sequence_simple_master::type_id::create("seq_simple");
