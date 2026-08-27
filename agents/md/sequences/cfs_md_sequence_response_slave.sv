@@ -20,6 +20,8 @@
                 cfs_md_sequence_simple_slave seq;
                 
                 `uvm_do_with(seq, {
+                    // item_mon.data[0] == 'h85 -> seq.item.response == CFS_MD_ERR;
+                    // item_mon.data[0] != 'h85 -> seq.item.response == CFS_MD_OKAY;
                 })
             end
         endtask
