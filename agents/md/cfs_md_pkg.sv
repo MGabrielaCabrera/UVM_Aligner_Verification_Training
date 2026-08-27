@@ -30,6 +30,10 @@
         `include "cfs_md_sequence_base.sv"
         `include "cfs_md_sequence_base_master.sv"
         `include "cfs_md_sequence_simple_master.sv"
+        `include "cfs_md_sequence_base_slave.sv"
+        `include "cfs_md_sequence_simple_slave.sv"
+        `include "cfs_md_sequence_response_slave.sv"
+        `include "cfs_md_sequence_response_forever_slave.sv"
 
 
 
