@@ -79,6 +79,8 @@
             
             void'(begin_tr(item)); // Setting the start time of the transaction
             
+            `uvm_info("DEBUG", $sformatf("Monitor started collecting item: %0s", item.convert2string()), UVM_NONE)
+
             output_port.write(item); // Sending the item to the analysis port to be collected by other components
             
             @(posedge vif.clk);
