@@ -23,5 +23,15 @@
             has_checks = 1;
         end
 
+        // Rules
+        // DATA_WIDTH must be a power of 2. We don't need this check to be executed in every clock
+        // cycle, so we can use an initial block.
+        initial begin
+            if($countones(DATA_WIDTH) != 1) begin
+                $error("DATA_WIDTH is not a power of two - value in binary: 'b%0b, in hex is 'h%0h, in dec is %0d", DATA_WIDTH, DATA_WIDTH, DATA_WIDTH);
+            end
+        end
+
+
     endinterface
 `endif
