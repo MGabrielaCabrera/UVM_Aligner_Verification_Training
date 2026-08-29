@@ -11,7 +11,7 @@
 
             cfs_md_agent_config#(DATA_WIDTH)::type_id::set_inst_override(cfs_md_agent_config_master#(DATA_WIDTH)::get_type(),"agent_config", this);
             cfs_md_sequencer_base#(cfs_md_item_drv_master)::type_id::set_inst_override(cfs_md_sequencer_master#(DATA_WIDTH)::get_type(),"sequencer", this);
-            cfs_md_driver#(cfs_md_item_drv_master)::type_id::set_inst_override(cfs_md_driver_master#(DATA_WIDTH)::get_type(),"driver", this);
+            cfs_md_driver#(DATA_WIDTH, cfs_md_item_drv_master)::type_id::set_inst_override(cfs_md_driver_master#(DATA_WIDTH)::get_type(),"driver", this);
         endfunction
     endclass
 `endif
