@@ -24,13 +24,31 @@
         end
 
         // Rules
-        // DATA_WIDTH must be a power of 2. We don't need this check to be executed in every clock
+        // 1. DATA_WIDTH must be a power of 2. We don't need this check to be executed in every clock
         // cycle, so we can use an initial block.
         initial begin
             if($countones(DATA_WIDTH) != 1) begin
                 $error("DATA_WIDTH is not a power of two - value in binary: 'b%0b, in hex is 'h%0h, in dec is %0d", DATA_WIDTH, DATA_WIDTH, DATA_WIDTH);
             end
         end
+
+        // 2. DATA_WIDTH must be at least 8. We don't need this check to be executed in every clock
+        // cycle, so we can use an initial block.
+        initial begin
+            if(DATA_WIDTH < 8) begin
+                $error("DATA_WIDTH is less than 8 - value in binary: 'b%0b, in hex is 'h%0h, in dec is %0d", DATA_WIDTH, DATA_WIDTH, DATA_WIDTH);
+            end
+        end
+
+        // 3. Valid must stay high until ready is high
+        property valid_high_until_ready_p;
+            @(posedge clk) disable iff(!reset_n || !has_checks)
+            $fell(valid) |-> $past(ready) == 1; // When valid fallas, ready must have been high in the previous clock cycle.
+        endproperty
+    
+        VALID_HIGH_UNTIL_READY_A : assert property(valid_high_until_ready_p) else
+            $error("valid signal did not stay high until ready became high");
+
 
 
     endinterface
