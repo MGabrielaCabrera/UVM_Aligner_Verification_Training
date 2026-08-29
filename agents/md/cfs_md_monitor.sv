@@ -7,7 +7,7 @@
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
         // interface through a pointer (in the agent class)
-        cfs_md_agent_config agent_config;
+        cfs_md_agent_config#(DATA_WIDTH) agent_config;
         
         // UVM Analysis port to send the collected transactions 
         // to other components

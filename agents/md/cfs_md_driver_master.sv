@@ -1,7 +1,7 @@
 `ifndef CFS_MD_DRIVER_MASTER_SV
     `define CFS_MD_DRIVER_MASTER_SV
 
-    class cfs_md_driver_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_driver#(.ITEM_DRV(cfs_md_item_drv_master)) implements cfs_md_reset_handler;
+    class cfs_md_driver_master#(int unsigned DATA_WIDTH = 32) extends cfs_md_driver#(.DATA_WIDTH(DATA_WIDTH), .ITEM_DRV(cfs_md_item_drv_master)) implements cfs_md_reset_handler;
 
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
