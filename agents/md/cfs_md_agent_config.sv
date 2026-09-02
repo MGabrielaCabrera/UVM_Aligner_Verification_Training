@@ -21,6 +21,10 @@
         // Delay used when detecting start of an MD transaction in the monitor
         local time sample_delay_start_tr;
 
+        // Number of clock cycles whoch an MD transfer is considered
+        // stuck and an error is triggered
+        local int unsigned stuck_threshold;
+
         `uvm_component_utils(cfs_md_agent_config)
 
         function new(string name = "", uvm_component parent);
@@ -30,6 +34,7 @@
             has_checks = 1; // By default, we enable the checks
             has_coverage =1;
             sample_delay_start_tr = 1ns; // By default, we set the sample delay to 0
+            stuck_threshold = 1000;
         endfunction
 
 
@@ -70,6 +75,14 @@
             if (vif != null) begin
                 vif.has_checks = has_checks;
             end
+        endfunction
+
+        virtual function void set_stuck_threshold(int unsigned value);
+            stuck_threshold = value;
+        endfunction
+
+        virtual function int unsigned get_stuck_threshold();
+            return stuck_threshold;
         endfunction
 
         virtual function time get_sample_delay_start_tr();

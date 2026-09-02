@@ -88,6 +88,12 @@
             while(vif.ready !== 1) begin
                 @(posedge vif.clk);
                 item.length++;
+
+                if (agent_config.get_has_checks()) begin
+                    if (item.length > agent_config.get_stuck_threshold()) begin
+                        `uvm_error("PROTOCOL_ERROR", $sformatf("MD transfer reached the stuck threshold of %0d clock cycles", item.length))
+                    end
+                end
             end
 
             item.response = cfs_md_response'(vif.err);
