@@ -41,7 +41,7 @@ class cfs_algn_test_random extends cfs_algn_test_base;
                                                                      // get_data_width() from the sequencer, so we need to set the
                                                                      // sequencer before the randomization.
 
-                void'(seq_simple.randomize());
+                void'(seq_simple.randomize()); // Here, we can add constraint to force limit situations
 
                 seq_simple.start(env.md_rx_agent.sequencer);
             end
