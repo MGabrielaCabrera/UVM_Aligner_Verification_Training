@@ -103,6 +103,15 @@
         SIZE_STABLE_UNTIL_READY_A : assert property(size_stable_until_ready_p) else
             $error("Size signal did not remain constant until ready became high");
         
+        // 10. Size must not be zero when valid is high
+        property size_not_zero_p;
+            @(posedge clk) disable iff(!reset_n || !has_checks)
+            valid |-> size != 0; // When valid is high, size must not be zero.
+        endproperty
+
+        SIZE_NOT_ZERO_A: assert property(size_not_zero_p) else
+            $error("Size signal is zero when valid is high");
+
         // 11. Err is valid when valid and ready are high
         property err_valid_p;
             @(posedge clk) disable iff(!reset_n || !has_checks)
@@ -112,8 +121,16 @@
         ERR_VALID_A : assert property(err_valid_p) else
             $error("Err signal has unknown values when valid and ready are high");
         
-        // 13. Valid cannot have a unknown value
+        // 12. err must be zero when valid and ready are not high
+        property err_zero_when_not_valid_ready_p;
+            @(posedge clk) disable iff(!reset_n || !has_checks)
+            !(valid && ready) | -> err == 0; // When valid and ready are not high, err must be zero.
+        endproperty
 
+        ERR_ZERO_WHEN_NOT_VALID_READY_A : assert property(err_zero_when_not_valid_ready_p) else
+            $error("Err signal is not zero when valid and ready are not high");
+
+        // 13. Valid cannot have a unknown value
         property unknown_value_valid_p;
             @(posedge clk) disable iff(!reset_n || !has_checks)
             $isunknown(valid) == 0; // valid must not have unknown values.
@@ -130,6 +147,15 @@
 
         READY_VALID_A : assert property(ready_valid_p) else
             $error("Ready signal has unknown values when valid is high");
+
+        // 15. Offset + size must not exceed DATA_WIDTH/8 when valid is high
+        property offset_plus_size_not_exceed_data_width_p;
+            @(posedge clk) disable iff(!reset_n || !has_checks)
+            valid |-> (offset + size) <= (DATA_WIDTH/8); // When valid is high, offset + size must not exceed DATA_WIDTH/8. 
+        endproperty
+
+        OFFSET_PLUS_SIZE_NOT_EXCEED_DATA_WIDTH_A : assert property(offset_plus_size_not_exceed_data_width_p) else
+            $error("Offset + size exceeds DATA_WIDTH/8 when valid is high");
 
     endinterface
 `endif
