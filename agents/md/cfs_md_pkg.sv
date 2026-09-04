@@ -24,6 +24,7 @@
         `include "cfs_md_driver_master.sv"
         `include "cfs_md_driver_slave.sv"
         `include "cfs_md_monitor.sv"
+        `include "cfs_md_coverage.sv"
         `include "cfs_md_agent.sv"
         `include "cfs_md_agent_slave.sv"
         `include "cfs_md_agent_master.sv"
