@@ -46,6 +46,8 @@
 
     class cfs_md_coverage#(int unsigned DATA_WIDTH = 32) extends uvm_component implements cfs_md_reset_handler;
 
+        typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
+
         cfs_md_agent_config#(DATA_WIDTH) agent_config;
         
         //Port to receiving the collected items
@@ -58,7 +60,7 @@
 
         `uvm_component_param_utils(cfs_md_coverage#(DATA_WIDTH))
 
-        covergroup cover_item with function sample(cfs_apb_item_mon item);
+        covergroup cover_item with function sample(cfs_md_item_mon item);
             option.per_instance = 1; // One covergroup instance per agent instance
 
             offset: coverpoint item.offset {
@@ -124,7 +126,7 @@
         endfunction
 
         virtual function void handler_reset(uvm_phase phase);
-            cfs_apb_vif vif = agent_config.get_vif();
+            cfs_md_vif vif = agent_config.get_vif();
             cover_reset.sample(vif.valid);
 
         endfunction
@@ -132,11 +134,11 @@
         // Method to visualize the coverage result in edaplayground
         virtual function string coverage2string();
             string result = {$sformatf("\n   cover_item:               %03.2f%%", cover_item.get_inst_coverage()),
-                            $sformatf("\n      direction:              %03.2f%%", cover_item.direction.get_inst_coverage()),
-                            $sformatf("\n      length:                 %03.2f%%", cover_item.length.get_inst_coverage()),
+                            $sformatf("\n      offset:                 %03.2f%%", cover_item.offset.get_inst_coverage()),
+                            $sformatf("\n      size:                   %03.2f%%", cover_item.size.get_inst_coverage()),
                             $sformatf("\n      prev_item_delay:        %03.2f%%", cover_item.prev_item_delay.get_inst_coverage()),
-                            $sformatf("\n      response_x_direction:   %03.2f%%", cover_item.response_x_direction.get_inst_coverage()),
-                            $sformatf("\n      trans_direction:        %03.2f%%", cover_item.trans_direction.get_inst_coverage()),
+                            $sformatf("\n      offset_x_size:          %03.2f%%", cover_item.offset_x_size.get_inst_coverage()),
+                            $sformatf("\n      response:               %03.2f%%", cover_item.response.get_inst_coverage()),
                             $sformatf("\n      cover_reset:            %03.2f%%", cover_reset.get_inst_coverage()),
                             $sformatf("\n      access_ongoing:         %03.2f%%", cover_reset.access_ongoing.get_inst_coverage()),
                             $sformatf("\n      wrap_cover_data_0:      %0s", wrap_cover_data_0.coverage2string()),
@@ -162,6 +164,11 @@
         end
 
         endfunction
+
+        virtual function void report_phase(uvm_phase phase);
+            `uvm_info("DEBUG", $sformatf("\n Coverage report for %0s: \n %0s", this.get_full_name(), coverage2string()), UVM_NONE)
+        endfunction
+        
   
 
     endclass

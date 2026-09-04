@@ -14,6 +14,8 @@
 
         cfs_md_monitor#(DATA_WIDTH) monitor;
 
+        cfs_md_coverage#(DATA_WIDTH) coverage;
+
         `uvm_component_param_utils(cfs_md_agent#(DATA_WIDTH, ITEM_DRV))
 
         function new(string name = "", uvm_component parent);
@@ -24,8 +26,11 @@
             super.build_phase(phase);
             // We create the configuration object and set it as a child of the agent
             agent_config = cfs_md_agent_config#(DATA_WIDTH)::type_id::create("agent_config", this);
-
             monitor = cfs_md_monitor#(DATA_WIDTH)::type_id::create("monitor", this);
+
+            if (agent_config.get_has_coverage()) begin
+                coverage = cfs_md_coverage#(DATA_WIDTH)::type_id::create("coverage", this);
+            end
 
             // We create the sequencer and set it as a child of the agent
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
@@ -50,6 +55,11 @@
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
                 driver.seq_item_port.connect(sequencer.seq_item_export);
                 driver.agent_config = agent_config;
+            end
+
+            if (agent_config.get_has_coverage()) begin
+                coverage. agent_config = agent_config;
+                monitor.output_port.connect(coverage.port_item);
             end
 
 
