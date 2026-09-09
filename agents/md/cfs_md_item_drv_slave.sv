@@ -5,7 +5,7 @@
 
         rand int unsigned length;
 
-        rand md_response response;
+        rand cfs_md_response response;
 
         rand bit ready_at_end;
 
