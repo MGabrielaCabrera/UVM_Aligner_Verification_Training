@@ -26,10 +26,8 @@
         virtual function void write(cfs_md_item_mon item);
             if(item.is_active()) begin
                 if(pending_items.is_full()) begin
-                    `uvm_fatal("ALGORITHM_ISSUE", 
-                                $sformatf("FIFO %0s is full (size: %0d) - a possible cause is that
-                                    there is no sequence started which pulls information from this FIFO",
-                                    pending_items.get_full_name(), pending_items.size()))
+                    `uvm_fatal("ALGORITHM_ISSUE", $sformatf("FIFO %0s is full (size: %0d),  a possible cause is that there is no sequence started which pulls information from this FIFO",
+                     pending_items.get_full_name(), pending_items.size()))
                 end
 
                 if(pending_items.try_put(item) == 0) begin

@@ -1,11 +1,10 @@
 `ifndef CFS_ALGN_ENV_SV
     `define CFS_ALGN_ENV_SV
-        class cfs_algn_env#(int ALGN_DATA_WIDTH = 32) extends uvm_env;
+        class cfs_algn_env#(int unsigned ALGN_DATA_WIDTH = 32) extends uvm_env;
 
             cfs_apb_agent apb_agent;
 
             cfs_md_agent_master#(ALGN_DATA_WIDTH) md_agent_master;
-
             cfs_md_agent_slave#(ALGN_DATA_WIDTH) md_agent_slave;
     
             // Mandatory for all the test classes to have the UVM macro to register
@@ -13,7 +12,7 @@
             // to work with your component.
             // The argument is the name of the class
             `uvm_component_param_utils(cfs_algn_env#(ALGN_DATA_WIDTH))
-    
+
             function new(string name = "", uvm_component parent);
                 super.new(name, parent);
             endfunction
