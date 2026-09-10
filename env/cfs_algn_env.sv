@@ -11,7 +11,7 @@
             // the class with the factory, enabling the core UVM infrastructure 
             // to work with your component.
             // The argument is the name of the class
-            `uvm_component_param_utils(cfs_algn_env#(ALGN_DATA_WIDTH))
+            `uvm_component_param_utils(cfs_algn_env#(ALGN_DATA_WIDTH));
 
             function new(string name = "", uvm_component parent);
                 super.new(name, parent);
@@ -25,6 +25,8 @@
                 // MD agents
                 md_agent_master = cfs_md_agent_master#(ALGN_DATA_WIDTH)::type_id::create("md_agent_master", this);
                 md_agent_slave = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_agent_slave", this);
+
+            
             endfunction
         endclass
 `endif

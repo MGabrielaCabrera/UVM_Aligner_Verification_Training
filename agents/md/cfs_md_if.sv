@@ -124,7 +124,7 @@
         // 12. err must be zero when valid and ready are not high
         property err_zero_when_not_valid_ready_p;
             @(posedge clk) disable iff(!reset_n || !has_checks)
-            !(valid && ready) | -> err == 0; // When valid and ready are not high, err must be zero.
+            !(valid && ready) |-> err == 0; // When valid and ready are not high, err must be zero.
         endproperty
 
         ERR_ZERO_WHEN_NOT_VALID_READY_A : assert property(err_zero_when_not_valid_ready_p) else
