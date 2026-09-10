@@ -6,9 +6,9 @@
 
         constraint item_hard {
             item.data.size() > 0;
-            item.data.size() <= p_sequencer.get_data_width() / 8;
-            item.offset < p_sequencer.get_data_width() / 8;
-            item.offset + item.data.size() <= p_sequencer.get_data_width() / 8;
+            item.data.size() <= data_width / 8;
+            item.offset      <  data_width / 8;
+            item.data.size() + item.offset <= data_width / 8;
         }
 
         `uvm_object_utils(cfs_md_sequence_simple_master)

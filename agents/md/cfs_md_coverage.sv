@@ -68,7 +68,7 @@
                 bins values[] = {[0:(DATA_WIDTH/8)-1]};
             }
 
-            size: coverpoint item.size {
+            size: coverpoint item.data.size {
                 option.comment = "Size of the MD access";
                 bins values[] = {[1:(DATA_WIDTH/8)]};
             }
