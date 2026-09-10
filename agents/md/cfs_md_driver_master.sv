@@ -56,7 +56,6 @@
             for(int i = 0; i < item.post_drive_delay; i++) begin
                 @(posedge vif.clk);
             end
-            endtask
         endtask
 
         virtual function void handler_reset(uvm_phase phase);

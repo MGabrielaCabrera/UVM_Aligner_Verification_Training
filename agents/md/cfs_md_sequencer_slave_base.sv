@@ -37,8 +37,8 @@
             end
         endfunction
 
-        virtual function void handle_reset(uvm_phase phase);
-            super.handle_reset(phase);
+        virtual function void handler_reset(uvm_phase phase);
+            super.handler_reset(phase);
             pending_items.flush();
         endfunction
 
