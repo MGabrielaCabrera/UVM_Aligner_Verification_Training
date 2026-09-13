@@ -18,3 +18,4 @@
             `uvm_send(item)
         endtask
     endclass
+`endif
