@@ -4,7 +4,7 @@
     class cfs_md_sequence_base_slave extends cfs_md_sequence_base#(.ITEM_DRV(cfs_md_item_drv_slave));
 
         // Declaring p_sequencer using a macro
-        `uvm_declare_p_sequencer(cfs_md_sequencer_base_slave)
+        `uvm_declare_p_sequencer(cfs_md_sequencer_slave_base)
 
         `uvm_object_utils(cfs_md_sequence_base_slave)
 
