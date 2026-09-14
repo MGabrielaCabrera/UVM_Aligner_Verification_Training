@@ -31,19 +31,19 @@ class cfs_algn_test_random extends cfs_algn_test_base;
             fork 
                 begin
                     cfs_md_sequence_response_forever_slave seq = cfs_md_sequence_response_forever_slave::type_id::create("seq");
-                    seq.start(env.md_tx_agent.sequencer);
+                    seq.start(env.md_agent_master.sequencer);
                 end
             join_none
 
             repeat(4) begin
-                cfs_md_sequence_simple_master seq_simple = cfs_md_sequence_simple_master::type_id::create("seq_simple");
-                seq_simple.set_sequencer(env.md_rx_agent.sequencer); // This is needed because in the randomisation we are using 
+                cfs_md_sequence_simple_slave seq_simple = cfs_md_sequence_simple_slave::type_id::create("seq_simple");
+                seq_simple.set_sequencer(env.md_agent_slave.sequencer); // This is needed because in the randomisation we are using 
                                                                      // get_data_width() from the sequencer, so we need to set the
                                                                      // sequencer before the randomization.
 
                 void'(seq_simple.randomize()); // Here, we can add constraint to force limit situations
 
-                seq_simple.start(env.md_rx_agent.sequencer);
+                seq_simple.start(env.md_agent_slave.sequencer);
             end
             
             #(100ns);
