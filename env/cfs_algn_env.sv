@@ -4,8 +4,8 @@
 
             cfs_apb_agent apb_agent;
 
-            cfs_md_agent_master#(ALGN_DATA_WIDTH) md_agent_master;
-            cfs_md_agent_slave#(ALGN_DATA_WIDTH) md_agent_slave;
+            cfs_md_agent_master#(ALGN_DATA_WIDTH) md_rx_agent;
+            cfs_md_agent_slave#(ALGN_DATA_WIDTH) md_tx_agent;
     
             // Mandatory for all the test classes to have the UVM macro to register
             // the class with the factory, enabling the core UVM infrastructure 
@@ -23,8 +23,8 @@
                 apb_agent = cfs_apb_agent::type_id::create("apb_agent", this);
             
                 // MD agents
-                md_agent_master = cfs_md_agent_master#(ALGN_DATA_WIDTH)::type_id::create("md_agent_master", this);
-                md_agent_slave = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_agent_slave", this);
+                md_rx_agent = cfs_md_agent_master#(ALGN_DATA_WIDTH)::type_id::create("md_rx_agent", this);
+                md_tx_agent = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_tx_agent", this);
 
             
             endfunction

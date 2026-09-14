@@ -51,6 +51,10 @@ module testbench();
     uvm_config_db#(virtual cfs_apb_if)::set(null, "uvm_test_top.env.apb_agent", "vif", apb_if);
 
     // MD interface to the database
+    //uvm_config_db#(virtual cfs_md_if#(`CFS_ALGN_TEST_ALGN_DATA_WIDTH))::set(null, "uvm_test_top.env.md_rx_agent", "vif", md_rx_if);
+    //uvm_config_db#(virtual cfs_md_if#(`CFS_ALGN_TEST_ALGN_DATA_WIDTH))::set(null, "uvm_test_top.env.md_tx_agent", "vif", md_tx_if);
+
+    // MD interfaces to the database. These names must match the actual objects created in the environment.
     uvm_config_db#(virtual cfs_md_if#(`CFS_ALGN_TEST_ALGN_DATA_WIDTH))::set(null, "uvm_test_top.env.md_agent_slave", "vif", md_rx_if);
     uvm_config_db#(virtual cfs_md_if#(`CFS_ALGN_TEST_ALGN_DATA_WIDTH))::set(null, "uvm_test_top.env.md_agent_master", "vif", md_tx_if);
 
