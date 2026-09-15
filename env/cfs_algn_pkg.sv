@@ -10,5 +10,5 @@
         import cfs_md_pkg::*;
         `include "cfs_algn_env.sv"
 
-    endpackage;
+    endpackage
 `endif
