@@ -26,6 +26,10 @@
             item.offset_default_c.constraint_mode(0);
         endfunction
 
+        function void pre_randomize();
+            data_width = p_sequencer.get_data_width();
+        endfunction
+
         virtual task body();
             // Start the sequence by sending the item to the sequencer
             //start_item(item);
