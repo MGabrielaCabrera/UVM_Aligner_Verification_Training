@@ -2,6 +2,8 @@
     `define CFS_APB_PKG_SV
 
     `include "uvm_macros.svh"
+    `include "uvm_ext_pkg.sv"
+
     `include "cfs_apb_if.sv" // Interfaces cannot be include inside
                              // a package, so we include it here
     
@@ -9,6 +11,7 @@
 
         // Importing the UVM package to use UVM classes and macros
         import uvm_pkg::*;
+        import uvm_ext_pkg::*;
 
         `include "cfs_apb_types.sv"
         `include "cfs_apb_reset_handler.sv"

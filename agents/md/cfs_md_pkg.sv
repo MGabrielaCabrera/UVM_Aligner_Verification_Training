@@ -2,9 +2,11 @@
     `define CFS_MD_PKG_SV
 
     `include "cfs_md_if.sv"
+    `include "uvm_ext_pkg.sv"
 
     package cfs_md_pkg;
         import uvm_pkg::*;
+        import uvm_ext_pkg::*;
         `include "cfs_md_types.sv"
         `include "cfs_md_agent_config.sv"
         `include "cfs_md_agent_config_slave.sv"
