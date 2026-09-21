@@ -17,7 +17,7 @@
             super.end_of_elaboration_phase(phase);
 
             super.agent_config = agent_config;
-            endfunction
+        endfunction
 
         protected virtual task collect_transaction();
             cfs_apb_vif vif = agent_config.get_vif();
