@@ -2,58 +2,25 @@
     `define CFS_MD_MONITOR_SV
 
     // We need the DATA_WIDTH parameter to be able to access the interface
-    class cfs_md_monitor#(int unsigned DATA_WIDTH = 32) extends uvm_monitor implements cfs_md_reset_handler;
+    class cfs_md_monitor#(int unsigned DATA_WIDTH = 32) extends uvm_ext_monitor#(.VIRTUAL_INTF(virtual cfs_md_if#(DATA_WIDTH)), .ITEM_MON(cfs_md_item_mon));
 
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
         // interface through a pointer (in the agent class)
         cfs_md_agent_config#(DATA_WIDTH) agent_config;
-        
-        // UVM Analysis port to send the collected transactions 
-        // to other components
-        uvm_analysis_port#(cfs_md_item_mon) output_port;
-
-        // Process for collect_Transactions() task
-        protected process process_collect_transactions;
-
 
         `uvm_component_param_utils(cfs_md_monitor#(DATA_WIDTH))
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
-
-            output_port = new("output_port", this);
         endfunction
 
+        // Temporary solution for the agent.config to be accessible from the monitor class
+        virtual function void end_of_elaboration_phase(uvm_phase phase);
+            super.end_of_elaboration_phase(phase);
 
-        // Task for waiting the reset to end (synchronous)
-        virtual task wait_reset_end();
-            agent_config.wait_reset_end();
-        endtask
-
-        protected virtual task collect_transactions();
-           fork
-                begin
-                    process_collect_transactions = process::self();
-
-                    forever begin
-                        collect_transaction();
-                    end
-                end
-           join
-        endtask
-
-        virtual task run_phase(uvm_phase phase);
-            forever begin
-                fork
-                    begin
-                        wait_reset_end();
-                        collect_transactions();
-                        disable fork;
-                    end
-                join
-            end
-        endtask
+            super.agent_config = agent_config;
+        endfunction
 
         protected virtual task collect_transaction();
             cfs_md_vif vif = agent_config.get_vif();
@@ -105,13 +72,6 @@
             `uvm_info("DEBUG", $sformatf("Monitored item: %0s", item.convert2string()), UVM_NONE)
         
         endtask
-
-        virtual function void handler_reset(uvm_phase phase);
-           if(process_collect_transactions != null) begin
-                process_collect_transactions.kill();
-                process_collect_transactions = null;
-            end
-        endfunction
 
     endclass
 `endif
