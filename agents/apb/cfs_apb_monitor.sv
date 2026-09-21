@@ -1,61 +1,28 @@
 `ifndef CFS_APB_MONITOR_SV
     `define CFS_APB_MONITOR_SV
 
-    class cfs_apb_monitor extends uvm_monitor implements cfs_apb_reset_handler;
-
-        // Declaring agent config class to have access to the virtual 
-        // interface through a pointer (in the agent class)
-        cfs_apb_agent_config agent_config;
+    class cfs_apb_monitor extends uvm_ext_monitor#(.VIRTUAL_INTF(cfs_apb_vif), .ITEM_MON(cfs_apb_item_mon));
         
-        // UVM Analysis port to send the collected transactions 
-        // to other components
-        uvm_analysis_port#(cfs_apb_item_mon) output_port;
-
-        // Process for collect_Transactions() task
-        protected process process_collect_transactions;
+        cfs_apb_agent_config agent_config;
 
         `uvm_component_utils(cfs_apb_monitor)
 
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
 
-            output_port = new("output_port", this);
         endfunction
-        
-        virtual task run_phase(uvm_phase phase);
-            forever begin
-                fork
-                    begin
-                        wait_reset_end();
-                        collect_transactions();
-                        disable fork;
-                    end
-                join
-            end
-        endtask
 
-        // Task for waiting the reset to end (synchronous)
-        virtual task wait_reset_end();
-            agent_config.wait_reset_end();
-        endtask
+        // Temporary solution for the agent.config to be accessible from the monitor class
+        virtual function void end_of_elaboration_phase(uvm_phase phase);
+            super.end_of_elaboration_phase(phase);
 
-        protected virtual task collect_transactions();
-           fork
-                begin
-                    process_collect_transactions = process::self();
-
-                    forever begin
-                        collect_transaction();
-                    end
-                end
-           join
-        endtask
+            super.agent_config = agent_config;
+            endfunction
 
         protected virtual task collect_transaction();
-            // Pointer to the virtual interface
             cfs_apb_vif vif = agent_config.get_vif();
 
-            cfs_apb_item_mon item = cfs_apb_item_mon::type_id::create("item", this);
+            cfs_apb_item_mon item = ITEM_MON::type_id::create("item", this);
 
             while(vif.psel == 0) begin
                 @(posedge vif.pclk);
@@ -104,11 +71,5 @@
             @(posedge vif.pclk);
         endtask
 
-        virtual function void handler_reset(uvm_phase phase);
-           if(process_collect_transactions != null) begin
-                process_collect_transactions.kill();
-                process_collect_transactions = null;
-            end
-        endfunction
     endclass
 `endif
