@@ -7,7 +7,7 @@
         cfs_apb_agent_config agent_config;
         
         // Sequencer handler and driver handler
-        cfs_apb_sequencer sequencer;
+        uvm_ext_sequencer#(cfs_apb_item_drv) sequencer;
         cfs_apb_driver driver;
 
         // Monitor handler
@@ -36,7 +36,7 @@
             // We check if the agent is active or passive, and we create the sequencer
             // and driver only if it's active
             if (agent_config.get_active_passive() == UVM_ACTIVE) begin
-                sequencer = cfs_apb_sequencer::type_id::create("sequencer", this);
+                sequencer = uvm_ext_sequencer#(cfs_apb_item_drv)::type_id::create("sequencer", this);
                 driver = cfs_apb_driver::type_id::create("driver", this);
             end
         endfunction
