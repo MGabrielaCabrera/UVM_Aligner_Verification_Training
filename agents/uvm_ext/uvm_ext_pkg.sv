@@ -11,6 +11,7 @@
         `include "uvm_ext_monitor.sv"
         `include "uvm_ext_cover_index_wrapper.sv"
         `include "uvm_ext_coverage.sv"
+        `include "uvm_ext_sequencer.sv"
         
 
     endpackage

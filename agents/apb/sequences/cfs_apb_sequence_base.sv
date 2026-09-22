@@ -4,7 +4,7 @@
     class cfs_apb_sequence_base extends uvm_sequence#(cfs_apb_item_drv);
         
         // Declaring p_sequecer using a macro
-        `uvm_declare_p_sequencer(cfs_apb_sequencer)
+        `uvm_declare_p_sequencer(uvm_ext_sequencer#(cfs_apb_item_drv))
         // We can also declare the sequencer as a variable, but we need to connect it in the body of the sequence
         // cfs_apb_sequencer p_sequencer;
 
