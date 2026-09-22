@@ -4,19 +4,16 @@
     // Analysis port
     `uvm_analysis_imp_decl(_item)
 
-    class cfs_md_coverage#(int unsigned DATA_WIDTH = 32) extends uvm_ext_coverage#(.VIRTUAL_INTF(cfs_apb_vif), .ITEM_MON(cfs_apb_item_mon));
+    class cfs_md_coverage#(int unsigned DATA_WIDTH = 32) extends uvm_ext_coverage#(.VIRTUAL_INTF(virtual cfs_md_if#(DATA_WIDTH)), .ITEM_MON(cfs_md_item_mon));
 
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
         cfs_md_agent_config#(DATA_WIDTH) agent_config;
         
-        //Port to receiving the collected items
-        uvm_analysis_imp_item#(cfs_md_item_mon, cfs_md_coverage#(DATA_WIDTH)) port_item;
-
         // Wrapper over the coverage group covering the indices of data signal
-        cfs_md_cover_index_wrapper#(DATA_WIDTH) wrap_cover_data_0;
+        uvm_ext_cover_index_wrapper#(DATA_WIDTH) wrap_cover_data_0;
 
-        cfs_md_cover_index_wrapper#(DATA_WIDTH) wrap_cover_data_1;
+        uvm_ext_cover_index_wrapper#(DATA_WIDTH) wrap_cover_data_1;
 
         `uvm_component_param_utils(cfs_md_coverage#(DATA_WIDTH))
 
@@ -72,16 +69,22 @@
         function new(string name = "", uvm_component parent);
             super.new(name, parent);
             
-            port_item = new("port_item", this);
             cover_item = new();
             cover_item.set_inst_name($sformatf("%s_%s",get_full_name(), "cover_item"));
             cover_reset = new();
             cover_reset.set_inst_name($sformatf("%s_%s",get_full_name(), "cover_reset"));
         endfunction
-        
+    
+        // Temporary solution for the agent.config to be accessible from the monitor class
+        virtual function void end_of_elaboration_phase(uvm_phase phase);
+            super.end_of_elaboration_phase(phase);
+
+            super.agent_config = agent_config;
+        endfunction
+
         virtual function void build_phase(uvm_phase phase);
-            wrap_cover_data_0 = cfs_md_cover_index_wrapper#(DATA_WIDTH)::type_id::create("wrap_cover_data_0", this);
-            wrap_cover_data_1 = cfs_md_cover_index_wrapper#(DATA_WIDTH)::type_id::create("wrap_cover_data_1", this);
+            wrap_cover_data_0 = uvm_ext_cover_index_wrapper#(DATA_WIDTH)::type_id::create("wrap_cover_data_0", this);
+            wrap_cover_data_1 = uvm_ext_cover_index_wrapper#(DATA_WIDTH)::type_id::create("wrap_cover_data_1", this);
         
         endfunction
 
@@ -102,8 +105,8 @@
                             $sformatf("\n      cover_reset:            %03.2f%%", cover_reset.get_inst_coverage()),
                             $sformatf("\n      access_ongoing:         %03.2f%%", cover_reset.access_ongoing.get_inst_coverage()),
                             $sformatf("\n      wrap_cover_data_0:      %0s", wrap_cover_data_0.coverage2string()),
-                            $sformatf("\n      wrap_cover_data_1:      %0s", wrap_cover_data_1.coverage2string())
-
+                            $sformatf("\n      wrap_cover_data_1:      %0s", wrap_cover_data_1.coverage2string()),
+                            super.coverage2string()
                             };
             return result;
         endfunction
@@ -124,11 +127,6 @@
         end
 
         endfunction
-
-        virtual function void report_phase(uvm_phase phase);
-            `uvm_info("DEBUG", $sformatf("\n Coverage report for %0s: \n %0s", this.get_full_name(), coverage2string()), UVM_NONE)
-        endfunction
-        
   
 
     endclass
