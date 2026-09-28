@@ -16,6 +16,13 @@
             super.new(name, parent);
         endfunction
 
+        // Temporary solution for the agent.config to be accessible from the monitor class
+        virtual function void end_of_elaboration_phase(uvm_phase phase);
+            super.end_of_elaboration_phase(phase);
+
+            super.agent_config = agent_config;
+        endfunction
+
         // Task for waiting the reset to end (synchronous)
         virtual task wait_reset_end();
             agent_config.wait_reset_end();
