@@ -2,7 +2,7 @@
     `define CFS_MD_AGENT_SV
     
     // Implements means that all the functions in the interface class must be implemented
-    class cfs_md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRV = cfs_md_item_drv) extends uvm_agent implements cfs_md_reset_handler;
+    class cfs_md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRV = cfs_md_item_drv) extends uvm_agent implements uvm_ext_reset_handler;
 
         typedef virtual cfs_md_if#(DATA_WIDTH) cfs_md_vif;
 
@@ -72,9 +72,9 @@
             get_children(children);
             
             foreach(children[idx]) begin
-                cfs_md_reset_handler reset_handler;
+                uvm_ext_reset_handler reset_handler;
                 
-                // If the chindren can be casted to cfs_md_reset_handler
+                // If the chindren can be casted to uvm_ext_reset_handler
                 if($cast(reset_handler, children[idx])) begin
                     // Each children execute their handler_reset method
                     reset_handler.handler_reset(phase);
