@@ -2,7 +2,7 @@
     `define CFS_APB_AGENT_SV
     
     // Implements means that all the functions in the interface class must be implemented
-    class cfs_apb_agent extends uvm_agent implements cfs_apb_reset_handler;
+    class cfs_apb_agent extends uvm_agent implements uvm_ext_reset_handler;
 
         cfs_apb_agent_config agent_config;
         
@@ -80,7 +80,7 @@
             get_children(children);
             
             foreach(children[idx]) begin
-                cfs_apb_reset_handler reset_handler;
+                uvm_ext_reset_handler reset_handler;
                 
                 // If the chindren can be casted to cfs_apb_reset_handler
                 if($cast(reset_handler, children[idx])) begin
