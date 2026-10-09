@@ -13,6 +13,7 @@
         `include "uvm_ext_coverage.sv"
         `include "uvm_ext_sequencer.sv"
         `include "uvm_ext_driver.sv"
+        `include "uvm_ext_agent.sv"
         
 
     endpackage
