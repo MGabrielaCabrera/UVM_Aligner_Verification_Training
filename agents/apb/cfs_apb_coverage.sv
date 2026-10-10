@@ -83,7 +83,10 @@
         virtual function void end_of_elaboration_phase(uvm_phase phase);
             super.end_of_elaboration_phase(phase);
 
-            super.agent_config = agent_config;
+            if($cast(agent_config, super.agent_config) == 0) begin
+            `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Could not cast %0s to %0s", 
+                super.agent_config.get_type_name(), cfs_apb_agent_config::type_id::type_name))
+            end
         endfunction
 
         virtual function void build_phase(uvm_phase phase);
