@@ -22,8 +22,13 @@
 
         virtual function void build_phase(uvm_phase phase);
             super.build_phase(phase);
-            // We create the configuration object and set it as a child of the agent
-            agent_config = uvm_ext_agent_config#(VIRTUAL_INTF)::type_id::create("agent_config", this);
+            // The uvm_ext_agent_config is created only if there is no agent_config available in the database
+            // This is done like this because the tx md agent would take the agent_config from the database
+            // but the rx md agent would create its own agent_config.
+            if(!uvm_config_db#(uvm_ext_agent_config#(VIRTUAL_INTF))::get(this, "", "agent_config", agent_config)) begin
+                agent_config = uvm_ext_agent_config#(VIRTUAL_INTF)::type_id::create("agent_config", this);
+            end
+
             monitor = uvm_ext_monitor#(VIRTUAL_INTF, ITEM_MON)::type_id::create("monitor", this);
 
             if (agent_config.get_has_coverage()) begin

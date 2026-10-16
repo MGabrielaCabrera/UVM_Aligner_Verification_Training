@@ -24,6 +24,20 @@
             
                 // MD agents
                 md_rx_agent = cfs_md_agent_master#(ALGN_DATA_WIDTH)::type_id::create("md_rx_agent", this);
+                
+                // This is normally how the profesional projects works in terms of the agent_configuration. 
+                // However for this project, only TX agent would use the agent_config from the database:
+                begin
+                    cfs_md_agent_config_slave#(ALGN_DATA_WIDTH) agent_config = cfs_md_agent_config_slave#(ALGN_DATA_WIDTH)::type_id::create("agent_config", this);
+
+                    // The struck_threshold is changed. So, the agent_config is set in the database with the new value.
+                    agent_config.set_stuck_threshold(100);
+
+
+                    // In the configuration of the database, it is specified that the agent_config is only for the md_tx_agent      
+                    uvm_config_db#(uvm_ext_pkg::uvm_ext_agent_config#(.VIRTUAL_INTF(virtual cfs_md_if#(ALGN_DATA_WIDTH))))::set(this, "md_tx_agent", "agent_config", agent_config);
+                end
+                
                 md_tx_agent = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_tx_agent", this);
 
             
