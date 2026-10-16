@@ -21,7 +21,7 @@
 
             if($cast(agent_config, super.agent_config) == 0) begin
             `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Could not cast %0s to %0s", 
-                super.agent_config.get_type_name(), cfs_md_agent_config::type_id::type_name))
+                super.agent_config.get_type_name(), cfs_md_agent_config#(DATA_WIDTH)::type_id::type_name))
             end
         endfunction
 
