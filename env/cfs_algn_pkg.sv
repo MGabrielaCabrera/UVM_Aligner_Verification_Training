@@ -3,11 +3,14 @@
     `include "uvm_macros.svh"
     `include "cfs_apb_pkg.sv"
     `include "cfs_md_pkg.sv"
+    `include "cfs_algn_reg_pkg.sv"
 
     package cfs_algn_pkg;
         import uvm_pkg::*;
         import cfs_apb_pkg::*;
         import cfs_md_pkg::*;
+        import cfs_algn_reg_pkg::*;
+
         `include "cfs_algn_env.sv"
 
     endpackage
