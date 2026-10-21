@@ -10,3 +10,4 @@ $UVM_HOME/src/uvm_pkg.sv
 ./env/cfs_algn_env.sv
 ./tests/cfs_algn_test_pkg.sv
 ./tb/testbench.sv
+./reg_model/cfs_algn_reg_pkg.sv
