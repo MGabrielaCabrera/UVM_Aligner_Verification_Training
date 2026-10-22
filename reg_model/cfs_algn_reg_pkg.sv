@@ -5,6 +5,8 @@
 
         import uvm_pkg::*;
 
+        `include "cfs_algn_reg_ctrl.sv"
+
 
 
     endpackage
