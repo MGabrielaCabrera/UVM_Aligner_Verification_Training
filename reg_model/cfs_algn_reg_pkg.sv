@@ -8,6 +8,7 @@
         `include "cfs_algn_reg_ctrl.sv"
         `include "cfs_algn_reg_status.sv"
         `include "cfs_algn_reg_irqen.sv"
+        `include "cfs_algn_reg_irq.sv"
 
     endpackage
 `endif
