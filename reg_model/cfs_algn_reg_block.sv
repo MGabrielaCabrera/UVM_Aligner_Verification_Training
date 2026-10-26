@@ -21,8 +21,8 @@
                 .base_addr('h0000),
                 .n_bytes(4),
                 .endian(UVM_LITTLE_ENDIAN),
-                .byte_addressing(1)) // Each address unit is 1 byte. With n_bytes(4), consecutive 32-bit registers sit at 0x0, 0x4, 0x8 ...
-            )
+                .byte_addressing(1) // Each address unit is 1 byte. With n_bytes(4), consecutive 32-bit registers sit at 0x0, 0x4, 0x8 ...
+            );
 
             default_map.set_check_on_read(1); // The RTL response would be compared with the mirroed value on read.
 
@@ -42,10 +42,10 @@
             IRQEN.build();
             IRQ.build();
 
-            default.map.add_reg(.rg(CTRL), .offset('h0000), .rights("RW"));
-            default.map.add_reg(.rg(STATUS), .offset('h000C), .rights("RO"));
-            default.map.add_reg(.rg(IRQEN), .offset('h00F0), .rights("RW"));
-            default.map.add_reg(.rg(IRQ), .offset('h00F4), .rights("RW"));
+            default_map.add_reg(.rg(CTRL), .offset('h0000), .rights("RW"));
+            default_map.add_reg(.rg(STATUS), .offset('h000C), .rights("RO"));
+            default_map.add_reg(.rg(IRQEN), .offset('h00F0), .rights("RW"));
+            default_map.add_reg(.rg(IRQ), .offset('h00F4), .rights("RW"));
 
         endfunction
 
