@@ -6,6 +6,9 @@
 
             cfs_md_agent_master#(ALGN_DATA_WIDTH) md_rx_agent;
             cfs_md_agent_slave#(ALGN_DATA_WIDTH) md_tx_agent;
+
+            // Model handler
+            cfs_algn_model model;
     
             // Mandatory for all the test classes to have the UVM macro to register
             // the class with the factory, enabling the core UVM infrastructure 
@@ -40,7 +43,7 @@
                 
                 md_tx_agent = cfs_md_agent_slave#(ALGN_DATA_WIDTH)::type_id::create("md_tx_agent", this);
 
-            
+                model = cfs_algn_model::type_id::create("model", this);
             endfunction
         endclass
 `endif
