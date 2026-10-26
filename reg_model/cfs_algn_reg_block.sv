@@ -1,0 +1,55 @@
+`ifndef CFS_ALGN_REG_BLOCK_SV
+    `define CFS_ALGN_REG_BLOCK_SV
+
+    class cfs_algn_reg_block extends uvm_reg_block;
+    
+        `uvm_object_utils(cfs_algn_reg_block)
+
+        // The registers must be declared as rand
+        rand cfs_algn_reg_ctrl CTRL;
+        rand cfs_algn_reg_status STATUS;
+        rand cfs_algn_reg_irqen IRQEN;
+        rand cfs_algn_reg_irq IRQ;
+
+        function new(string name = "cfs_algn_reg_block");
+            super.new(.name(name), .has_coverage(UVM_NO_COVERAGE));
+        endfunction
+
+        virtual function void build();
+            default_map = create_map(
+                .name("apb_map"),
+                .base_addr('h0000),
+                .n_bytes(4),
+                .endian(UVM_LITTLE_ENDIAN),
+                .byte_addressing(1)) // Each address unit is 1 byte. With n_bytes(4), consecutive 32-bit registers sit at 0x0, 0x4, 0x8 ...
+            )
+
+            default_map.set_check_on_read(1); // The RTL response would be compared with the mirroed value on read.
+
+
+            CTRL = cfs_algn_reg_ctrl::type_id::create(.name("CTRL"), .parent(null), .contxt(get_full_name()));
+            STATUS = cfs_algn_reg_status::type_id::create(.name("STATUS"), .parent(null), .contxt(get_full_name()));
+            IRQEN = cfs_algn_reg_irqen::type_id::create(.name("IRQEN"), .parent(null), .contxt(get_full_name()));
+            IRQ = cfs_algn_reg_irq::type_id::create(.name("IRQ"), .parent(null), .contxt(get_full_name()));
+ 
+            CTRL.configure(.blk_parent(this));
+            STATUS.configure(.blk_parent(this));
+            IRQEN.configure(.blk_parent(this));
+            IRQ.configure(.blk_parent(this));
+
+            CTRL.build();
+            STATUS.build();
+            IRQEN.build();
+            IRQ.build();
+
+            default.map.add_reg(.rg(CTRL), .offset('h0000), .rights("RW"));
+            default.map.add_reg(.rg(STATUS), .offset('h000C), .rights("RO"));
+            default.map.add_reg(.rg(IRQEN), .offset('h00F0), .rights("RW"));
+            default.map.add_reg(.rg(IRQ), .offset('h00F4), .rights("RW"));
+
+        endfunction
+
+
+    endclass
+
+`endif
