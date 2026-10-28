@@ -28,6 +28,11 @@
         `include "cfs_apb_monitor.sv"
         `include "cfs_apb_agent.sv"
 
+        // As the UVM user guide says: because this transaction adapter is specific
+        // to the bus agent, not the register model, it should be provided as part of
+        // UVM-compliant bus.
+        `include "cfs_apb_reg_adapter.sv"
+
     endpackage
 
 `endif
