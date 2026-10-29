@@ -1,7 +1,7 @@
 `ifndef CFS_ALGN_MODEL_SV
     `define CFS_ALGN_MODEL_SV
 
-    class cfs_algn_model extends uvm_component;
+    class cfs_algn_model extends uvm_component implements uvm_ext_reset_handler;
 
         `uvm_component_utils(cfs_algn_model)
 
@@ -21,7 +21,11 @@
                 reg_block.lock_model(); // No more changes are wanted
             end
         endfunction 
-    
+
+        virtual function void handler_reset(uvm_phase phase);
+            reg_block.reset("HARD");
+        endfunction
+
     endclass
 
 

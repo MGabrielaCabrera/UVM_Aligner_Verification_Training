@@ -1,6 +1,6 @@
 `ifndef CFS_ALGN_ENV_SV
     `define CFS_ALGN_ENV_SV
-        class cfs_algn_env#(int unsigned ALGN_DATA_WIDTH = 32) extends uvm_env;
+        class cfs_algn_env#(int unsigned ALGN_DATA_WIDTH = 32) extends uvm_env implements uvm_ext_reset_handler;
 
             cfs_apb_agent apb_agent;
 
@@ -61,5 +61,25 @@
 
                 apb_agent.monitor.output_port.connect(predictor.bus_in);
             endfunction
+
+            virtual function void handler_reset(uvm_phase phase);
+                model.handler_reset(phase);
+            endfunction
+
+            protected virtual task wait_reset_start();
+                apb_agent.agent_config.wait_reset_start();
+            endtask
+
+            protected virtual task wait_reset_end();
+                apb_agent.agent_config.wait_reset_end();
+            endtask
+
+            virtual task run_phase(uvm_phase phase);
+                forever begin
+                    wait_reset_start();
+                    handler_reset(phase);
+                    wait_reset_end();
+                end
+            endtask
         endclass
 `endif
