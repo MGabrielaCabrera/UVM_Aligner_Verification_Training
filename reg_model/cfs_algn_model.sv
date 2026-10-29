@@ -12,7 +12,7 @@
             super.new(.name(name), .parent(parent));
         endfunction
 
-        function  voidbuild_phase(uvm_phase phase);
+        function  void build_phase(uvm_phase phase);
             super.build_phase(phase);
 
             if (reg_block ==null) begin
