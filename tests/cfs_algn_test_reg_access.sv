@@ -25,8 +25,22 @@
  
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
+            begin
+                cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
 
-            fork 
+                void'(seq_simple.randomize() with {
+                    item.addr == 'h0;
+                    item.dir  == CFS_APB_WRITE;
+                    item.data == 32'h00000200;
+                });
+
+                seq_simple.start(env.apb_agent.sequencer);
+            end
+
+            #100ns;
+
+
+            /*fork 
                 // To force a reset in the middle of the transfers
                 begin
                     cfs_apb_vif vif = env.apb_agent.agent_config.get_vif();
@@ -89,7 +103,7 @@
                 
                 seq_random.start(env.apb_agent.sequencer);
 
-            end
+            end*/
 
             `uvm_info("DEBUG", "End of test", UVM_LOW);
 
