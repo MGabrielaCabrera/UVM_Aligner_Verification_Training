@@ -37,6 +37,18 @@
                 seq_simple.start(env.apb_agent.sequencer);
             end
 
+            //Read from CTRL register
+            begin
+                cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
+
+                void'(seq_simple.randomize() with {
+                    item.addr == 'h0;
+                    item.dir  == CFS_APB_READ;
+                });
+
+                seq_simple.start(env.apb_agent.sequencer);
+            end      
+          
             #100ns;
 
 

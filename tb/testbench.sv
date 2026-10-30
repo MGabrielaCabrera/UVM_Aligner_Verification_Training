@@ -61,6 +61,7 @@ module testbench();
     // Run the test
     //The test name can be passed as an argument when running the simulation
     // +access+r +UVM_TESTNAME=cfs_algn_test_reg_access +UVM_MAX_QUIT_COUNT=1 -coverage_functional
+    //-access +rw +UVM_TESTNAME=cfs_algn_test_reg_access +UVM_MAX_QUIT_COUNT=1 +uvm_set_verbosity=*,REG_PREDICT,UVM_HIGH,run
     run_test("");
   end 
   
