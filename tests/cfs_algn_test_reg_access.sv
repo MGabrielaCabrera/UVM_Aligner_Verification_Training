@@ -31,7 +31,7 @@
                 void'(seq_simple.randomize() with {
                     item.addr == 'h0;
                     item.dir  == CFS_APB_WRITE;
-                    item.data == 32'h00000202;
+                    item.data == 32'h00000200;
                 });
 
                 seq_simple.start(env.apb_agent.sequencer);
@@ -47,8 +47,8 @@
                 });
 
                 seq_simple.start(env.apb_agent.sequencer);
-            end
-
+            end      
+          
             #100ns;
 
 
