@@ -14,6 +14,7 @@
         import cfs_md_pkg::*;
         import cfs_algn_reg_pkg::*;
         `include "cfs_algn_model.sv"
+        `include "cfs_algn_reg_predictor.sv"
         `include "cfs_algn_env.sv"
 
     endpackage

@@ -11,7 +11,7 @@
             cfs_algn_model model;
 
             // Register predictor handler
-            uvm_reg_predictor#(cfs_apb_item_mon) predictor;
+            cfs_algn_reg_predictor#(cfs_apb_item_mon) predictor;
     
             // Mandatory for all the test classes to have the UVM macro to register
             // the class with the factory, enabling the core UVM infrastructure 
@@ -48,7 +48,7 @@
 
                 model = cfs_algn_model::type_id::create("model", this);
             
-                predictor = uvm_reg_predictor#(cfs_apb_item_mon)::type_id::create("predictor", this);
+                predictor = cfs_algn_reg_predictor#(cfs_apb_item_mon)::type_id::create("predictor", this);
             endfunction
 
             virtual function void connect_phase(uvm_phase phase);
