@@ -9,5 +9,17 @@
             super.new(name, parent);
         endfunction
 
+        // The write function is overwritten
+        virtual function void write(BUSTYPE tr);
+            uvm_reg_bus_op operation;
+
+            adapter.bus2reg(tr, operation);
+
+            if (operation.status == UVM_IS_OK) begin
+                super.write(tr);
+            end
+        endfunction
+
+
     endclass
 `endif
