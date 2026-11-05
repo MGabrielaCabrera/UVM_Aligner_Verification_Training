@@ -3,6 +3,8 @@
 
     class cfs_algn_reg_predictor#(type BUSTYPE = uvm_sequence_item) extends uvm_reg_predictor#(.BUSTYPE(BUSTYPE));
 
+        cfs_algn_env_config env_config;
+
         `uvm_component_param_utils(cfs_algn_reg_predictor#(BUSTYPE))
 
         function new(string name = "", uvm_component parent);

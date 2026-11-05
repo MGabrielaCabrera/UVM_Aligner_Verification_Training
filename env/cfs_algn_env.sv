@@ -2,6 +2,9 @@
     `define CFS_ALGN_ENV_SV
         class cfs_algn_env#(int unsigned ALGN_DATA_WIDTH = 32) extends uvm_env implements uvm_ext_reset_handler;
 
+            // Environment configuration
+            cfs_algn_env_config env_config;
+
             cfs_apb_agent apb_agent;
 
             cfs_md_agent_master#(ALGN_DATA_WIDTH) md_rx_agent;
@@ -25,6 +28,11 @@
 
             virtual function void build_phase(uvm_phase phase);
                 super.build_phase(phase);
+
+                env_config = cfs_algn_env_config::type_id::create("env_config", this);
+                env_config.set_algn_data_width(ALGN_DATA_WIDTH);
+                env_config.set_has_checks(1);
+
                 // We create the APB agent and set it as a child of the environment
                 apb_agent = cfs_apb_agent::type_id::create("apb_agent", this);
             
@@ -60,6 +68,8 @@
                 predictor.map = model.reg_block.default_map;
 
                 apb_agent.monitor.output_port.connect(predictor.bus_in);
+            
+                predictor.env_config = env_config;
             endfunction
 
             virtual function void handler_reset(uvm_phase phase);
