@@ -15,6 +15,7 @@
         import cfs_algn_reg_pkg::*;
         `include "cfs_algn_env_config.sv"
         `include "cfs_algn_model.sv"
+        `include "cfs_algn_reg_access_status_info.sv"
         `include "cfs_algn_reg_predictor.sv"
         `include "cfs_algn_env.sv"
 
