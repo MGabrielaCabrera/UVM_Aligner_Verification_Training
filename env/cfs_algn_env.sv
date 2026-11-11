@@ -69,6 +69,8 @@
 
                 apb_agent.monitor.output_port.connect(predictor.bus_in);
             
+                model.reg_block.default_map.set_sequencer(apb_agent.sequencer, adapter);
+
                 predictor.env_config = env_config;
             endfunction
 
