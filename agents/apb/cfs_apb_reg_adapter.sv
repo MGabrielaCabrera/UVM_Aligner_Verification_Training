@@ -24,7 +24,7 @@
             else if($cast(item_drv, bus_item)) begin
                 rw.kind = (item_drv.dir == CFS_APB_WRITE) ? UVM_WRITE : UVM_READ;
                 rw.addr = item_drv.addr;
-                rw.data = item_mon.data;
+                rw.data = item_drv.data;
                 rw.status = UVM_IS_OK;
             end
             else begin

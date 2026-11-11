@@ -14,6 +14,8 @@
         
         // The run phase is where the main stimulus generation and checking happens.
         virtual task run_phase(uvm_phase phase);
+
+            uvm_status_e status;
             // Objection mechanim to control when the test ends. An objection
             // is like a counter. When you raise an objection, you are 
             // incrementing the counter, and when you drop an objection
@@ -26,7 +28,8 @@
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
             begin
-                cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
+                env.model.reg_block.CTRL.write(status, 32'h00000202);
+                /*cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
 
                 void'(seq_simple.randomize() with {
                     item.addr == 'h0;
@@ -34,7 +37,7 @@
                     item.data == 32'h00000200;
                 });
 
-                seq_simple.start(env.apb_agent.sequencer);
+                seq_simple.start(env.apb_agent.sequencer);*/
             end
 
             //Read from CTRL register
