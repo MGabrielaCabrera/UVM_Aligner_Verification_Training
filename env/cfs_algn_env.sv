@@ -74,6 +74,8 @@
                 // Connection between the reg_block and the sequencer, so the predictor can send the register operations to the sequencer
                 model.reg_block.default_map.set_sequencer(apb_agent.sequencer, adapter);
 
+                // Connecting the config pointer of the model (need for the constraints as they need the width_size)
+                model.env_config = env_config;
             endfunction
 
             virtual function void handler_reset(uvm_phase phase);

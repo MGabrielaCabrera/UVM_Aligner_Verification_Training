@@ -5,16 +5,26 @@
 
         `uvm_object_utils(cfs_algn_reg_ctrl)
 
+        // Needed for the contraints:
+        local int unsigned ALGN_DATA_WIDTH;
+
         // The fields must be declared as rand
         rand uvm_reg_field SIZE;
         rand uvm_reg_field OFFSET;
         rand uvm_reg_field CLR;
 
+        constraint legal_size {
+            SIZE.value != 0;
+        }
+
+        constraint legal_size_offset {
+            ((ALGN_DATA_WIDTH / 8) + OFFSET.value) % SIZE.value == 0;
+        }
 
         function new(string name = "cfs_algn_reg_ctrl");
             // The new() of uvm_reg takes three arguments
             super.new(.name(name), .n_bits(32), .has_coverage(UVM_NO_COVERAGE));
-        
+            ALGN_DATA_WIDTH = 8;
         endfunction
 
         virtual function void build();
@@ -57,8 +67,22 @@
                 .is_rand(1),
                 .individually_accessible(0)
             );
+        endfunction
 
+        virtual function void SET_ALGN_DATA_WIDTH(int unsigned value);
+            if(value < 8) begin
+                `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Aligner data width must be greater than or equal to 8. Current value: %0d", value));
+            end
+            
+            if ($countones(value) != 1) begin
+                `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Aligner data width must be a power of 2. Current value: %0d", value));
+            end
+            
+            ALGN_DATA_WIDTH = value;
+        endfunction
 
+        virtual function int unsigned GET_ALGN_DATA_WIDTH();
+            return ALGN_DATA_WIDTH;
         endfunction
     endclass
 `endif
