@@ -18,6 +18,7 @@
         `include "cfs_algn_reg_access_status_info.sv"
         `include "cfs_algn_reg_predictor.sv"
         `include "cfs_algn_env.sv"
+        `include "cfs_algn_seq_req_config.sv"
 
     endpackage
 `endif

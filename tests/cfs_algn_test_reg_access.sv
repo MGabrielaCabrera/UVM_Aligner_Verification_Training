@@ -32,14 +32,12 @@
 
             // Writing in the CTRL register
             begin
-                // env.model.reg_block.CTRL.SIZE.set(2);
-                // env.model.reg_block.CTRL.OFFSET.set(2);
-                // env.model.reg_block.CTRL.update(status);
-                
-                void'(env.model.reg_block.CTRL.randomize());
-                env.model.reg_block.CTRL.update(status);
 
-                // env.model.reg_block.CTRL.write(status, 32'h00000202);
+                cfs_algn_seq_reg_config seq = cfs_algn_seq_reg_config::type_id::create("seq", this);
+
+                seq.reg_block = env.model.reg_block;
+
+                seq.start(env.model.reg_block.default_map.get_sequencer());
 
                 /*cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
 
