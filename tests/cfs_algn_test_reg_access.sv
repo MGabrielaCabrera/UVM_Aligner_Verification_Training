@@ -16,6 +16,8 @@
         virtual task run_phase(uvm_phase phase);
 
             uvm_status_e status;
+            uvm_reg_data_t data;
+
             // Objection mechanim to control when the test ends. An objection
             // is like a counter. When you raise an objection, you are 
             // incrementing the counter, and when you drop an objection
@@ -27,8 +29,15 @@
  
             `uvm_info("DEBUG", "Start of test", UVM_LOW);
             #100ns;
+
+            // Writing in the CTRL register
             begin
-                env.model.reg_block.CTRL.write(status, 32'h00000202);
+                env.model.reg_block.CTRL.SIZE.set(2);
+                env.model.reg_block.CTRL.OFFSET.set(2);
+                env.model.reg_block.CTRL.update(status);
+                
+                // env.model.reg_block.CTRL.write(status, 32'h00000202);
+
                 /*cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
 
                 void'(seq_simple.randomize() with {
@@ -42,83 +51,20 @@
 
             //Read from CTRL register
             begin
-                cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
+
+                env.model.reg_block.CTRL.read(status, data);
+
+                /*cfs_apb_sequence_simple seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
 
                 void'(seq_simple.randomize() with {
                     item.addr == 'h0;
                     item.dir  == CFS_APB_READ;
                 });
 
-                seq_simple.start(env.apb_agent.sequencer);
+                seq_simple.start(env.apb_agent.sequencer);*/
             end      
           
             #100ns;
-
-
-            /*fork 
-                // To force a reset in the middle of the transfers
-                begin
-                    cfs_apb_vif vif = env.apb_agent.agent_config.get_vif();
-                    
-                    // We wait for 3 apb accesses to start
-                    repeat(3) begin
-                        @(posedge vif.psel);
-                    end
-                    
-                    // During the third access we wait 11 ns
-                    #11ns;
-
-                    vif.preset_n <= 0;
-
-                    repeat(4) begin
-                        @(posedge vif.pclk);
-                    end
-
-                    vif.preset_n <= 1;
-                end
-                    
-                begin // Sequence simple
-                    cfs_apb_sequence_simple seq_simple;
-                    seq_simple = cfs_apb_sequence_simple::type_id::create("seq_simple");
-                    void'(seq_simple.randomize() with { 
-                        item.addr == 32'h0; // Control reg
-                        item.dir == CFS_APB_WRITE;
-                        item.data == 32'h11;});
-                    
-                    seq_simple.start(env.apb_agent.sequencer);
-                end
-
-                begin // Sequence RW
-                    cfs_apb_sequence_rw seq_rw;
-                    seq_rw = cfs_apb_sequence_rw::type_id::create("seq_rw");
-                    void'(seq_rw.randomize() with { 
-                        addr == 32'hc; // Status reg
-                        });
-                    
-                    seq_rw.start(env.apb_agent.sequencer);
-                end
-
-                begin // Sequence_random
-                    cfs_apb_sequence_random seq_random;
-                    seq_random = cfs_apb_sequence_random::type_id::create("seq_random");
-                    void'(seq_random.randomize() with { 
-                        num_items == 3;});
-                    
-                    seq_random.start(env.apb_agent.sequencer);
-
-                end
-            join
-
-            // Just so see that everythings comes back after the reset
-            begin // Sequence_random
-                cfs_apb_sequence_random seq_random;
-                seq_random = cfs_apb_sequence_random::type_id::create("seq_random");
-                void'(seq_random.randomize() with { 
-                    num_items == 3;});
-                
-                seq_random.start(env.apb_agent.sequencer);
-
-            end*/
 
             `uvm_info("DEBUG", "End of test", UVM_LOW);
 
