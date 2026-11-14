@@ -56,6 +56,10 @@
                     if (((env_config.get_algn_data_width()/ 8) + offset_value) % size_value != 0) begin
                         return cfs_algn_reg_access_status_info::new_instance(UVM_NOT_OK, "Trying to write an illegal combination of (SIZE, OFFSET) will return an APB error");
                     end
+                    // Trying to write an illegal combination: SIZE + OFFSET > aligner data width
+                    if (offset_value + size_value > (env_config.get_algn_data_width()/8)) begin
+                        return cfs_algn_reg_access_status_info::new_instance(UVM_NOT_OK, "Trying to write an illegal combination: SIZE + OFFSET > aligner data width");
+                    end         
                 end
 
             end
