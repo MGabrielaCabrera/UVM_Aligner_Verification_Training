@@ -19,6 +19,7 @@
 
         constraint legal_size_offset {
             ((ALGN_DATA_WIDTH / 8) + OFFSET.value) % SIZE.value == 0;
+            OFFSET.value + SIZE.value <= (ALGN_DATA_WIDTH / 8);
         }
 
         function new(string name = "cfs_algn_reg_ctrl");
